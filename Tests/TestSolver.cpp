@@ -13,7 +13,7 @@ namespace Tests
 	public:
 		TEST_METHOD(Initialisation_d_un_solver)
 		{
-			
+
 			Solver solver(blankGrid);
 
 			for (int i = 0; i < 9; i++) {
@@ -35,6 +35,7 @@ namespace Tests
 			for (int i = 0; i < 9; i++) {
 				Assert::IsFalse(possibilities[i]);
 			}
+
 		}
 
 		TEST_METHOD(Calc_Possibilities_Missing) {
