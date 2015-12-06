@@ -9,6 +9,12 @@ class Cellule {
 public:
 	Cellule();
     Cellule (int);
+	int getValue();
+	bool isEmpty();
+	bool isGuess;
+	bool isFixed;
+	void setValue(int);
+private:
 	int value;
 };
 

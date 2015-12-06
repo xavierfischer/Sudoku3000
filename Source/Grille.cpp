@@ -11,9 +11,13 @@
 Grille::Grille() {
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
-			cells[i][j].value = 0;
+			cells[i][j].setValue(0);
 		}
 	}
+}
+
+Cellule *Grille::getCell(int i, int j) {
+	return &cells[i][j];
 }
 
 /*
@@ -24,7 +28,7 @@ Grille::Grille(int * a[9])
 {
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
-			cells[i][j].value=a[i][j];
+			cells[i][j].setValue(a[i][j]);
 		}
 	}
 }

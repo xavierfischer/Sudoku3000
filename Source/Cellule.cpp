@@ -10,7 +10,28 @@
 // Constructeur par défaut
 Cellule::Cellule() {
 	value = 0;
+	isGuess = false;
 }
 Cellule::Cellule(int n){
 	value = n;
+	isGuess = false;
 }
+
+bool Cellule::isEmpty() {
+    if (value==0) {
+        return true;
+    }
+    else {
+        return value==0;
+    }
+}
+
+int Cellule::getValue()
+{
+	return value;
+}
+
+void Cellule::setValue(int n) {
+	value = n;
+}
+
