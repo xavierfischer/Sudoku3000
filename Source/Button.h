@@ -19,7 +19,7 @@ public:
 		sf::Font *fontT,
 		std::string stringT,
 		sf::Color colorT);
-
+	void EnfonceurButton();
 	sf::Text Texte;
 	sf::Text LinkedTexte(sf::Font *font, std::string str, sf::Color color);
 	sf::Vector2f Centering(sf::Text text);

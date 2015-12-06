@@ -36,6 +36,19 @@ void Controller::MaJHighlights(int i , int j) {
 	HighRegion.setPosition(sf::Vector2f(CellToPosition(3 * (i / 3), 0).x, CellToPosition(0, 3 * (j / 3)).y));
 }
 
+void Controller::PoliceDesCellules(Grille *grid)
+{
+	list<list<int>> Errors=grid.getUnconsistentCells(int i, int j) { ... } Errors = grid.getUnconsistentCells(ActiveCell[1], ActiveCell[2]);
+
+	for (std::list<int[2]>::iterator it = Errors.begin(); it != Errors.end(); it++) {
+		//Pour ==0 {
+
+	}
+
+	}
+}
+
+
 void Controller::run(){
 	sf::RenderWindow window(sf::VideoMode(443, 450), "SudokuSolver", sf::Style::Close);
 	//Couleurs
@@ -60,6 +73,7 @@ void Controller::run(){
 
 	bool HighlightsGrid = false;
 	bool HighlightsTheme = true;
+	bool ConsistencyHelp = false;
 
 	
 	sf::Font font;
@@ -140,6 +154,31 @@ void Controller::run(){
 		"Solve",
 		BackColor);
 
+	//---ConsistencyHelpButton
+	Button CHelpButton = Button(
+		sf::Color::Cyan,
+		sf::Vector2f(304, 274+15-40),
+		sf::Vector2f(124, 40),
+		&font,
+		"Aide (off)",
+		BackColor);
+	CHelpButton.setOutlineThickness(2);
+	CHelpButton.setOutlineColor(BackColor);
+
+	CHelpButton.AddHandler([&]() {
+		if (ConsistencyHelp) {
+			ConsistencyHelp = false;
+			CHelpButton.Texte.setString("Aide (off)");
+			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+		}
+		else {
+			ConsistencyHelp = true;
+			CHelpButton.Texte.setString("Aide (on)");
+			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+		}
+		CHelpButton.EnfonceurButton();
+	});
+
 	//Buttons de modification des valeurs
 	Button ButtonVal[10];
 	//--Création boutons
@@ -165,7 +204,19 @@ void Controller::run(){
 	//--Handlers de modification
 	for (int i = 0; i <= 9; ++i) {
 		ButtonVal[i].AddHandler([&, i]() {
+			ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte.setColor(sf::Color::Black);
 			(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+			std::cout << "Bite1" << std::endl;
+			if (ConsistencyHelp ) {
+				std::cout << "Bite2" << std::endl;
+				if(! (CurrentGrille.isCellConsistent(ActiveCell[1], ActiveCell[2])) ){
+					std::cout << "Bite3" << std::endl;
+					ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte.setColor(sf::Color::Red);
+				}
+				//Test de consistence
+				
+			}
+
 		});
 	}
 
@@ -347,13 +398,18 @@ void Controller::run(){
 					else if (SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						window.close();
 					}
+					//HelpButton
+					else if (CHelpButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						CHelpButton.CallHandler();
+					}
 					// ButtonVal
 					else {
-						for (int i = 0; i <= 9; ++i) {
+						for (int i = 1; i <= 9; ++i) {
 							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) & ActiveCell[0]==1) {
 								ButtonVal[i].CallHandler();
 							}
 						}
+
 					}
 					
 				}
@@ -515,13 +571,15 @@ void Controller::run(){
 			for (int i = 0; i <= 9; ++i) {
 				window.draw(ButtonVal[i]);
 				window.draw(ButtonVal[i].Texte);
-
 			}
 		}
 
 		//--Bouton Solve
 		window.draw(SolveButton);
 		window.draw(SolveButton.Texte);
+		window.draw(CHelpButton);
+		window.draw(CHelpButton.Texte);
+		
 
 		//Higlights
 
@@ -546,3 +604,7 @@ void Controller::run(){
 
 
 }
+
+
+
+

@@ -51,5 +51,9 @@ void Button::CallHandler()
 	handler();
 }
 
-
+void Button::EnfonceurButton() {
+	setOutlineColor(Button::getFillColor());
+	setFillColor(Button::Texte.getColor());
+	Texte.setColor(Button::getOutlineColor());
+}
 
