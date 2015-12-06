@@ -48,5 +48,15 @@ namespace Tests
 			Assert::IsFalse(regionB.isFull());
 			Assert::IsTrue(regionC.isFull());
 		}
+
+		TEST_METHOD(Is_Value_Present)
+		{
+			Assert::IsTrue(regionA.isPresent(3));
+			Assert::IsFalse(regionB.isPresent(1));
+			Assert::IsTrue(regionC.isPresent(1));
+			for (int i = 1; i < 10; i++) {
+				Assert::IsFalse(regionD.isPresent(i));
+			}
+		}
 	};
 }

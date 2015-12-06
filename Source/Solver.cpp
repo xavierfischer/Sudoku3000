@@ -15,15 +15,15 @@ Solver::Solver(Grille g) :grid(g) {
 }
 
 void calcPoss(NineUplet &region, NineUplet &line, NineUplet &column, bool localPossibilities[9]) {
-	for (int k = 0; k < 10; k++) {
+	for (int k = 1; k < 10; k++) {
 		localPossibilities[k] = (!line.isPresent(k)) && (!region.isPresent(k)) && (!column.isPresent(k));
 	}
 }
 
 void Solver::initiate() {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 9; i++) {
 		NineUplet line = grid.getLine(i);
-		for (int j = 0; j < 10; j++) {
+		for (int j = 0; j < 9; j++) {
 			NineUplet region = grid.getRegionFromCell(i, j);
 			NineUplet column = grid.getColumn(j);
 			calcPoss(region, line, column, possibilities[i][j]);
