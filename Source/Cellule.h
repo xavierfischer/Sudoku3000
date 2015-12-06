@@ -10,6 +10,7 @@ public:
 	Cellule();
     Cellule (int);
 	int value;
+	isEmpty();
 };
 
 #endif /* defined(__Sudoku__Cell__) */
