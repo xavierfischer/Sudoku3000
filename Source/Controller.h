@@ -11,9 +11,10 @@ class Controller
 {
 public:
 
-	
+	static Cell ActiveCell;
 	Controller();
-	static int * CellToPosition(int x, int y);
+	sf::Vector2i CellToPosition(int x, int y);
 	void run();
 	
 };
+

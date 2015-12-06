@@ -7,7 +7,7 @@
 #include "Controller.h"
 
 Button::Button() {
-	CODE = "NUL";
+
 }
 
 Button::Button(int I, int J, sf::Color color)
