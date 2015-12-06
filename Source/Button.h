@@ -9,9 +9,9 @@ class Button : public sf::RectangleShape
 {
 public:
 
-	
-	void setAction(void(*ActionPtr)(int i, int j, int* activeCell));
-	void callAction();
+	void AddHandler(std::function<void()> const &func);
+	void CallHandler();
+
 	void execute();
 	Button(int I, int J, sf::Color color);
 	Button(std::string code, sf::Color color);
@@ -29,7 +29,8 @@ public:
 	sf::Text LinkedTexte(sf::Font *font, std::string str, sf::Color color);
 	sf::Vector2f Centering(sf::Text text);
 private:
-	void(*fcnPtr)(int i, int j, int* activeCell);
+	std::function<void()> handler;
+
 
 
 };

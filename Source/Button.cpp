@@ -10,6 +10,8 @@ Button::Button() {
 
 }
 
+
+
 Button::Button(sf::Color colorFB, sf::Vector2f positionB, sf::Vector2f sizeB, sf::Font *fontT, std::string stringT, sf::Color colorT)
 {
 	setFillColor(colorFB);
@@ -57,12 +59,14 @@ Button::Button(std::string code, sf::Color color)
 	setFillColor(color);
 
 }
-void Button::setAction(void(*ActionPtr)(int i, int j, int* activeCell)) {
-	fcnPtr = ActionPtr;
+void Button::AddHandler(std::function<void()> const &func)
+{
+	handler = func;
 }
 
-void Button::callAction() {
-//	(*fcnPtr)();
+void Button::CallHandler()
+{
+	handler();
 }
 
 

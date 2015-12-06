@@ -106,16 +106,7 @@ void Controller::run(){
 	//ButtonCells
 	for (int i = 0; i <= 8; ++i) {
 		for (int j = 0; j <= 8; ++j) {
-			
-			//ButtonCell[i][j].setFillColor(sf::Color::Transparent);
-			//ButtonCell[i][j].setSize(sf::Vector2f(30, 30));
-			/*auto f = [=]() { 
-				ButtonCell[i][j].setFillColor(HighlightColor);
-				ActiveCell[0] = 1;
-				ActiveCell[1] = i;
-				ActiveCell[2] = j;
-			};
-			ButtonCell[i][j].setAction(f);*/
+			//Constructeur de ButtonCells
 			ButtonCell[i][j] = Button(sf::Color::Transparent,
 				sf::Vector2f(CellToPosition(i, j).x, CellToPosition(i, j).y),
 				sf::Vector2f(30, 30),
@@ -123,10 +114,14 @@ void Controller::run(){
 				" ",
 				sf::Color::Black
 				);
-			//ButtonCell[i][j].setPosition(CellToPosition(i, j).x, CellToPosition(i, j).y);
-			//ButtonCell[i][j].Texte.setCharacterSize(15);
-			//ButtonCell[i][j].Texte = ButtonCell[i][j].LinkedTexte(&font, " ", sf::Color::Black);
-			//à mettre dans la boucle ! ça change !
+			//Fonction du bouton
+			ButtonCell[i][j].AddHandler([&, i , j ]() {
+				ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+				ActiveCell[0] = 1;
+				ActiveCell[1] = i;
+				ActiveCell[2] = j;
+				ButtonCell[i][j].setFillColor(HighlightColor);
+			});
 		}
 	}
 
@@ -137,6 +132,13 @@ void Controller::run(){
 		&font,
 		"Annuler",
 		BackColor);
+	CancelButton.AddHandler([&]() {
+		ActiveCell[0] = 0;
+		ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+	});
+
+
+
 	/*CancelButton.setFillColor(ButtonColor);
 	CancelButton.setSize(sf::Vector2f(100,30));
 	CancelButton.CODE = "CAN";
@@ -151,7 +153,7 @@ void Controller::run(){
 		"Solve",
 		BackColor);
 
-
+	//Button de modification des valeurs
 	Button ButtonVal[10];
 	for (int i = 1; i <= 9; ++i) {
 		ButtonVal[i] = Button(
@@ -171,18 +173,11 @@ void Controller::run(){
 		"Effacer",
 		BackColor
 		);
-		//ButtonVal[i].setFillColor(ButtonColor);
-		//ButtonVal[i].setSize(sf::Vector2f(20,20));
-		//ButtonVal[i].CODE = "VAL";
-		//ButtonVal[i].i = i;
-		//ButtonVal[i].setPosition(sf::Vector2f(310+i*22,15));
-		//ButtonVal[i].Texte = ButtonVal[i].LinkedTexte(&font, std::to_string(i), sf::Color::Black);
-		//ButtonVal[i].Texte.setString(std::to_string(i));
-		//ButtonVal[i].Texte.setCharacterSize(20);
-		//ButtonVal[i].Texte.setColor(sf::Color::Black);
-		//ButtonVal[i].Texte.setPosition(Controller::Centering(TextVal[i],ButtonVal[i]));
-		
-	
+	for (int i = 0; i <= 9; ++i) {
+		ButtonVal[i].AddHandler([&, i]() {
+			(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+		});
+	}
 	
 	
 
@@ -282,8 +277,8 @@ void Controller::run(){
 							for (int j = 0; j <= 8; ++j) {
 								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 									
-
-									//ButtonCell[i][j].setFillColor(ButtonColor);
+									//Highlights
+									
 								}
 							}
 						}
@@ -299,11 +294,7 @@ void Controller::run(){
 						for (int i = 0; i <= 8; ++i) {
 							for (int j = 0; j <= 8; ++j) {
 								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-									ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
-									ActiveCell[0] = 1;
-									ActiveCell[1] = i;
-									ActiveCell[2] = j;
-									ButtonCell[i][j].setFillColor(HighlightColor);
+									ButtonCell[i][j].CallHandler();
 								}
 								
 							}
@@ -311,18 +302,19 @@ void Controller::run(){
 					}
 					//Verification pour le Cancel
 					else if (ActiveCell[0] == 1 & CancelButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-						ActiveCell[0] = 0;
-						ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+						//ActiveCell[0] = 0;
+						//ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+						CancelButton.CallHandler();
 					}
-					// ButtonVal
+					//SolveButton
 					else if (SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						window.close();
 					}
+					// ButtonVal
 					else {
 						for (int i = 0; i <= 9; ++i) {
-							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-								//action d'un buttonval
-								(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) & ActiveCell[0]==1) {
+								ButtonVal[i].CallHandler();
 							}
 						}
 					}
@@ -331,17 +323,100 @@ void Controller::run(){
 
 
 
-				// Si Espace, on ferme
+				// Cas clavier
 			case sf::Event::KeyPressed:
-				if (event.key.code == sf::Keyboard::Space) //espace, tapé
-				{
+				
+				switch (event.key.code) {
+				//Si espace, fermer
+				case sf::Keyboard::Space:
 					window.close();
 					break;
-				}
-				else //autre key tapée
-				{
+				//Valeurs de suppression
+				case sf::Keyboard::Numpad0 :
+					ButtonVal[0].CallHandler();
+					break;
+				case sf::Keyboard::BackSpace:
+					ButtonVal[0].CallHandler();
+					break;
+				case sf::Keyboard::Delete:
+					ButtonVal[0].CallHandler();
+					break;
+				//Valeurs de modification
+				case sf::Keyboard::Numpad1:
+					ButtonVal[1].CallHandler();
+					break;
+				case sf::Keyboard::Numpad2:
+					ButtonVal[2].CallHandler();
+					break;
+				case sf::Keyboard::Numpad3:
+					ButtonVal[3].CallHandler();
+					break;
+				case sf::Keyboard::Numpad4:
+					ButtonVal[4].CallHandler();
+					break;
+				case sf::Keyboard::Numpad5:
+					ButtonVal[5].CallHandler();
+					break;
+				case sf::Keyboard::Numpad6:
+					ButtonVal[6].CallHandler();
+					break;
+				case sf::Keyboard::Numpad7:
+					ButtonVal[7].CallHandler();
+					break;
+				case sf::Keyboard::Numpad8:
+					ButtonVal[8].CallHandler();
+					break;
+				case sf::Keyboard::Numpad9:
+					ButtonVal[9].CallHandler();
+					break;
+
+				//Selection / Déselection
+				case sf::Keyboard::Return:
+					if (ActiveCell[0] == 1) {
+						CancelButton.CallHandler(); // On déselectionne
+					}
+					else {
+						ButtonCell[ActiveCell[1]][ActiveCell[2]].CallHandler(); //On reselectionne la dernière
+					}
+						
+					break;
+
+				//Parcours avec les fleches
+					
+				case sf::Keyboard::Left:
+					if (ActiveCell[0] == 1 & ActiveCell[1] > 0 ) { 
+						//Si une cellule est active + si on n'est pas dans la colonne tout à gauche
+						std::cout << "L" << std::endl;
+						ButtonCell[ActiveCell[1]-1][ActiveCell[2]].CallHandler();
+						break;
+					}
+					break;
+				case sf::Keyboard::Right:
+					if (ActiveCell[0] == 1 & ActiveCell[1] < 8) {
+						std::cout << "R" << std::endl;
+						ButtonCell[ActiveCell[1]+1][ActiveCell[2]].CallHandler();
+						break;
+					}
+					break;
+				case sf::Keyboard::Up:
+					if (ActiveCell[0] == 1 & ActiveCell[2] > 0) {
+						std::cout << "U" << std::endl;
+						ButtonCell[ActiveCell[1]][ActiveCell[2]-1].CallHandler();
+						break;
+					}
+						break;
+				case sf::Keyboard::Down:
+					if (ActiveCell[0] == 1 & ActiveCell[2] <8) {
+						std::cout << "D" << std::endl;
+						ButtonCell[ActiveCell[1]][ActiveCell[2]+1].CallHandler();
+						break;
+					}
+					break;
+
+				default:
 					continue;
 				}
+				
 			default:
 				continue;
 			}
