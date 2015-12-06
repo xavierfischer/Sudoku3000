@@ -34,7 +34,7 @@ Cellule *NineUplet::getCell(int i) {
 bool NineUplet::isPresent(int n)
 {
 	for (int i = 0; i < 9; i++) {
-		if ((*(cells[i])).value == n) {
+		if ((*(cells[i])).getValue() == n) {
 			return true;
 		}
 	}
@@ -44,7 +44,7 @@ bool NineUplet::isPresent(int n)
 bool NineUplet::isFull() {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
-		result = result && (*cells[i]).value != 0;
+		result = result && (*cells[i]).getValue() != 0;
 		if (!result)
 			return result;
 	}

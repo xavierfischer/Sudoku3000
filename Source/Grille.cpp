@@ -108,10 +108,6 @@ NineUplet Grille::getColumn(int j) {
 	}
 }
 
-Cellule *Grille::getCell(int i, int j) {
-	return &cells[i][j];
-}
-
 bool Grille::isConsistent() {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
