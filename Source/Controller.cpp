@@ -70,7 +70,7 @@ void Controller::run(){
 
 	sf::Vector2i Position; //Position de la souris
 	Grille CurrentGrille;
-	std::cout << (*CurrentGrille.getCell(1, 2)).value << std::endl;
+	std::cout << (*CurrentGrille.getCell(1, 2)).getValue() << std::endl;
 	for (int i = 0; i <= 2;++i) {
 		ActiveCell[i] = 0;
 	}
@@ -367,11 +367,11 @@ void Controller::run(){
 		for (int i = 0; i <= 8; ++i) {
 			for (int j = 0; j <= 8; ++j) {
 				window.draw(ButtonCell[i][j]);
-				if ((*CurrentGrille.getCell(i, j)).value == 0) {
+				if ((*CurrentGrille.getCell(i, j)).getValue() == 0) {
 					ButtonCell[i][j].Texte.setString(" ");
 				}
 				else {
-					ButtonCell[i][j].Texte.setString(std::to_string((*CurrentGrille.getCell(i, j)).value));
+					ButtonCell[i][j].Texte.setString(std::to_string((*CurrentGrille.getCell(i, j)).getValue()));
 				}
 				window.draw(ButtonCell[i][j].Texte);
 			}

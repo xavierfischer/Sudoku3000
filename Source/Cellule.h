@@ -9,15 +9,13 @@ class Cellule {
 public:
 	Cellule();
     Cellule (int);
-	int value;
-<<<<<<< HEAD
-	isEmpty();
-	Cellule::getvalue(int,int);
-	isguess();
-=======
+	int getValue();
+	bool isEmpty();
+	bool isGuess;
 	bool isFixed;
 	void setValue(int);
->>>>>>> origin/MoussInterface
+private:
+	int value;
 };
 
 #endif /* defined(__Sudoku__Cell__) */

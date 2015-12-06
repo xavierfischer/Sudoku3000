@@ -10,12 +10,13 @@
 // Constructeur par défaut
 Cellule::Cellule() {
 	value = 0;
-	isguess=false
+	isGuess = false;
 }
 Cellule::Cellule(int n){
 	value = n;
+	isGuess = false;
 }
-<<<<<<< HEAD
+
 bool Cellule::isEmpty() {
     if (value==0) {
         return true;
@@ -24,15 +25,13 @@ bool Cellule::isEmpty() {
         return value==0;
     }
 }
-bool Cellule::isguess() {
+
+int Cellule::getValue()
+{
+	return value;
 }
-Cellule::getvalue(int i, int j);
-this->value = alue;
-    print Cellule([i],[j])
-    return *this;
-}
-=======
+
 void Cellule::setValue(int n) {
 	value = n;
 }
->>>>>>> origin/MoussInterface
+

@@ -15,7 +15,7 @@ bool NineUplet::isConsistent() {
 	for (int i = 0; i < 9; i++) {
 		count = 0;
 		for (int j = 0; j < 9; j++) {
-			count += ((*(cells[j])).value == i) ? 1 : 0;
+			count += ((*(cells[j])).getValue() == i) ? 1 : 0;
 			if (count > 1)
 				return false;
 		}
