@@ -14,3 +14,11 @@ Cellule::Cellule() {
 Cellule::Cellule(int n){
 	value = n;
 }
+bool Cellule::isEmpty() {
+    if (value==0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
