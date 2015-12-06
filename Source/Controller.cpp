@@ -52,11 +52,11 @@ void Controller::run(){
 	
 
 	//Grille
-	Button Grille=Button::Button("GRI",CellColor);
-	Grille.setSize(sf::Vector2f(274, 274));
-	Grille.setOutlineColor(sf::Color::Transparent);
-	Grille.setOutlineThickness(0);
-	Grille.setPosition(15, 15);
+	Button ButtonGrille=Button::Button("GRI",CellColor);
+	ButtonGrille.setSize(sf::Vector2f(274, 274));
+	ButtonGrille.setOutlineColor(sf::Color::Transparent);
+	ButtonGrille.setOutlineThickness(0);
+	ButtonGrille.setPosition(15, 15);
 
 	Button ButtonCell[9][9]{};
 	for (int i = 1; i <= 9; ++i) {
@@ -64,7 +64,7 @@ void Controller::run(){
 			//ButtonCell[i][j].setFillColor(sf::Color::Transparent);
 			//ButtonCell[i][j].setSize(sf::Vector2f(30, 30));
 			//ButtonCell[i][j].setOutlineColor(sf::Color::Transparent);
-			//ButtonCell[i][j].CODE = "CEL";
+			//ButtonCell[i][j].CODE = std::string("CEL");
 			//ButtonCell[i][j].setPosition(sf::Vector2f(CellToPosition(i, j)[0], CellToPosition(i, j)[1]));
 		}
 	}
@@ -164,6 +164,12 @@ void Controller::run(){
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					//TODO event action
+					
+
+
+
+
+
 				}
 
 
@@ -192,7 +198,7 @@ void Controller::run(){
 		//Drawing
 		window.clear(BackColor);
 		//window.draw(sprite);
-		window.draw(Grille);
+		window.draw(ButtonGrille);
 
 		//Mettre le highlight ici
 		window.draw(Plinev, 12, sf::Lines);
