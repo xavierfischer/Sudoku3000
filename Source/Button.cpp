@@ -16,6 +16,8 @@ Button::Button(int I, int J, sf::Color color)
 	i = I;
 	j = J;
 	setFillColor(color);
+	
+
 
 }
 

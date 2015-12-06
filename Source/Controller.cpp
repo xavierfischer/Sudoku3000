@@ -8,8 +8,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include "Cell.h"
-//#include "Grille.h"
+#include "Cellule.h"
+#include "Grille.h"
 
 
 
@@ -18,6 +18,20 @@ Controller::Controller()
 	
 	
 }
+
+sf::Vector2f Controller::Centering(sf::Text text, sf::RectangleShape Shape) {
+	float x = Shape.getPosition().x;
+	float y = Shape.getPosition().y;
+	float Sx = text.getCharacterSize()*text.getString().getSize() / 5;
+	float Sy = text.getCharacterSize() /1.6 ;
+
+	x = x + Shape.getSize().x / 2 - Sx;
+	y = y + Shape.getSize().y / 2 - Sy;
+	return sf::Vector2f(x, y);
+
+}
+
+
 
 sf::Vector2i Controller::CellToPosition(int i, int j)
 {
@@ -41,9 +55,9 @@ void Controller::run(){
 	sf::Color ButtonColor = sf::Color(255, 127, 102, 255);
 
 	sf::Vector2i Position; //Position de la souris
-	//Grille CurrentGrille;
+	Grille CurrentGrille;
 
-
+	int ActiveCell[] = { 0, 0, 0 };
 	sf::Font font;
 	if (!font.loadFromFile("arial_narrow_7.ttf"))
 	{
@@ -69,9 +83,6 @@ void Controller::run(){
 	RectGrille.setPosition(sf::Vector2f(15, 15));
 
 	Button ButtonCell[9][9];
-
-	
-
 	for (int i = 0; i <= 8; ++i) {
 		for (int j = 0; j <= 8; ++j) {
 			
@@ -79,11 +90,34 @@ void Controller::run(){
 			ButtonCell[i][j].setSize(sf::Vector2f(30, 30));
 			ButtonCell[i][j].CODE = "CEL";
 			ButtonCell[i][j].setPosition(CellToPosition(i, j).x, CellToPosition(i, j).y);
+			ButtonCell[i][j].Texte.setCharacterSize = 15;
+			ButtonCell[i][j].Texte.setFont(Font);
+			//à mettre dans la boucle ! ça change !
+			if (CurrentGrille.getCell(i, j).isFixed) {
+
+			}
+			ButtonCell[i][j].Texte.setColor
 
 		}
 	}
 	
-
+	Button ButtonVal[10];
+	sf::Text TextVal[10];
+	for (int i = 0; i <= 9; ++i) {
+		ButtonVal[i].setFillColor(ButtonColor);
+		ButtonVal[i].setSize(sf::Vector2f(20,20));
+		ButtonVal[i].CODE = "VAL";
+		ButtonVal[i].i = i;
+		ButtonVal[i].setPosition(sf::Vector2f(310+i*22,15));
+		TextVal[i].setFont(font);
+		TextVal[i].setString(std::to_string(i));
+		TextVal[i].setCharacterSize(20);
+		TextVal[i].setColor(sf::Color::Black);
+		TextVal[i].setPosition(Controller::Centering(TextVal[i],ButtonVal[i]));
+		
+	}
+	
+	
 
 	//grille par dessus le reste
 	sf::RectangleShape Glinev1;
@@ -175,17 +209,18 @@ void Controller::run(){
 			case sf::Event::MouseMoved:
 				Position = sf::Mouse::getPosition();
 				
-				/*if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+				if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						Temoin.setString("Inbound");
-
 						for (int i = 0; i <= 8; ++i) {
 							for (int j = 0; j <= 8; ++j) {
 								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-									ButtonCell[i][j].setFillColor(BackColor);
+									
+
+									//ButtonCell[i][j].setFillColor(ButtonColor);
 								}
 							}
 						}
-					}*/
+					}
 				
 				continue;
 
@@ -198,7 +233,9 @@ void Controller::run(){
 							for (int j = 0; j <= 8; ++j) {
 								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 									ButtonCell[i][j].setFillColor(BackColor);
-									//Controller::ActiveCell = CurrentGrille.Cell(i, j);
+									ActiveCell[0] = 1;
+									ActiveCell[1] = i;
+									ActiveCell[2] = j;
 								}
 								else {
 									ButtonCell[i][j].setFillColor(CellColor);
@@ -206,9 +243,7 @@ void Controller::run(){
 							}
 						}
 					}
-					else {
-						Temoin.setString("Outbound");
-					}
+					
 				}
 
 
@@ -231,7 +266,15 @@ void Controller::run(){
 
 
 
+		/*for (int i = 0; i <= 8; ++i) {
+			for (int j = 0; j <= 8; ++j) {
+				if (CurrentGrille.getCell(i, j) == ActiveCell) {
+					//Changer la couleur si la cellule est "active"
+				}
+				
 
+			}
+		}*/
 
 
 		//Drawing
@@ -243,7 +286,13 @@ void Controller::run(){
 				window.draw(ButtonCell[i][j]);
 			}
 		}
+		if (ActiveCell[0] == 1) {
+			for (int i = 0; i <= 9; ++i) {
+				window.draw(ButtonVal[i]);
+				window.draw(TextVal[i]);
 
+			}
+		}
 		//Mettre le highlight ici
 		window.draw(Plinev, 12, sf::Lines);
 		window.draw(Plineh, 12, sf::Lines);
@@ -251,7 +300,7 @@ void Controller::run(){
 		window.draw(Glinev2);
 		window.draw(Glineh1);
 		window.draw(Glineh2);
-		window.draw(Temoin);
+		//window.draw(Temoin);
 		
 
 

@@ -10,6 +10,7 @@ public:
 	Cellule();
     Cellule (int);
 	int value;
+	bool isFixed;
 };
 
 #endif /* defined(__Sudoku__Cell__) */
