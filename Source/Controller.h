@@ -1,21 +1,24 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <array>
 #include <thread>
 #include "Cellule.h"
-
+#include "Button.h"
+#include "Controller.h"
 
 
 class Controller 
 
 {
 public:
-
-	static sf::Vector2f Centering(sf::Text text, sf::RectangleShape Shape);
+	int ActiveCell[3];
+	sf::RectangleShape HighVertical;
+	sf::RectangleShape HighHorizontal ;
+	sf::RectangleShape HighRegion;
 	Controller();
 	sf::Vector2i CellToPosition(int x, int y);
 	void run();
-	int ActiveCell[3];
-	
+	void MaJHighlights(int i, int j);
 };
