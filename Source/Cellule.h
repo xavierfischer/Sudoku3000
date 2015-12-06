@@ -11,6 +11,7 @@ public:
     Cellule (int);
 	int value;
 	bool isFixed;
+	void setValue(int);
 };
 
 #endif /* defined(__Sudoku__Cell__) */

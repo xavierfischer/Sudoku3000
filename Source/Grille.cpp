@@ -16,8 +16,8 @@ Grille::Grille() {
 	}
 }
 
-Cellule Grille::getCell(int i, int j) {
-	return cells[i][j];
+Cellule *Grille::getCell(int i, int j) {
+	return &cells[i][j];
 }
 
 /*

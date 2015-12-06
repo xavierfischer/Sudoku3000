@@ -16,5 +16,6 @@ public:
 	Controller();
 	sf::Vector2i CellToPosition(int x, int y);
 	void run();
+	int ActiveCell[3];
 	
 };

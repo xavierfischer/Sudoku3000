@@ -14,3 +14,6 @@ Cellule::Cellule() {
 Cellule::Cellule(int n){
 	value = n;
 }
+void Cellule::setValue(int n) {
+	value = n;
+}
