@@ -10,6 +10,7 @@
 // Constructeur par défaut
 Cellule::Cellule() {
 	value = 0;
+	isguess=false
 }
 Cellule::Cellule(int n){
 	value = n;
@@ -21,4 +22,11 @@ bool Cellule::isEmpty() {
     else {
         return value==0;
     }
+}
+bool Cellule::isguess() {
+}
+Cellule::getvalue(int i, int j);
+this->value = alue;
+    print Cellule([i],[j])
+    return *this;
 }
