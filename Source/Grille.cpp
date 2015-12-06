@@ -142,3 +142,41 @@ bool Grille::isFull() {
 	}
 	return true;
 }
+
+/*
+	Template grid full
+*/
+
+Grille Grille::createTemplate() {
+	int l1[9] = { 1,2,3,4,5,6,7,8,9 };
+	int l2[9] = { 4,5,6,7,8,9,1,2,3 };
+	int l3[9] = { 7,8,9,1,2,3,4,5,6 };
+	int l4[9] = { 2,3,4,5,6,7,8,9,1 };
+	int l5[9] = { 5,6,7,8,9,1,2,3,4 };
+	int l6[9] = { 8,9,1,2,3,4,5,6,7 };
+	int l7[9] = { 9,1,2,3,4,5,6,7,8 };
+	int l8[9] = { 3,4,5,6,7,8,9,1,2 };
+	int l9[9] = { 6,7,8,9,1,2,3,4,5 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+/*
+Template grid with no 2s
+*/
+
+Grille Grille::createTemplateMissing() {
+	int l1[9] = { 1,0,3,4,5,6,7,8,9 };
+	int l2[9] = { 4,5,6,7,8,9,1,0,3 };
+	int l3[9] = { 7,8,9,1,0,3,4,5,6 };
+	int l4[9] = { 0,3,4,5,6,7,8,9,1 };
+	int l5[9] = { 5,6,7,8,9,1,0,3,4 };
+	int l6[9] = { 8,9,1,0,3,4,5,6,7 };
+	int l7[9] = { 9,1,0,3,4,5,6,7,8 };
+	int l8[9] = { 3,4,5,6,7,8,9,1,0 };
+	int l9[9] = { 6,7,8,9,0,2,3,4,5 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}

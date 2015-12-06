@@ -23,6 +23,9 @@ public:
 	bool isFull();
 	bool isConsistent();
 
+	static Grille createTemplate();
+	static Grille createTemplateMissing();
+
 private: 
 	Cellule cells[9][9];
 
