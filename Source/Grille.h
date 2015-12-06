@@ -18,6 +18,8 @@ public:
 	NineUplet getLine(int);
 	NineUplet getColumn(int);
 
+	Cellule *getCell(int, int);
+
 	bool isFull();
 	bool isConsistent();
 
