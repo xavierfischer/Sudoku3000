@@ -19,34 +19,6 @@ Controller::Controller()
 	
 }
 
-
-
-
-
-
-static void ActiverCell(int i, int j, int* activeCell) {
-	if (i >= 10) {
-		activeCell[0] = 0;
-	}
-	else {
-		activeCell[0] = 1;
-		activeCell[1] = i;
-		activeCell[2] = j;
-	}
-}
-
-static void ChangeCell(int i, int j, int* activeCell) {
-	if (i >= 10) {
-		activeCell[0] = 0;
-	}
-	else {
-		activeCell[0] = 1;
-		activeCell[1] = i;
-		activeCell[2] = j;
-	}
-}
-
-
 sf::Vector2i Controller::CellToPosition(int i, int j)
 {
 	int P[2];
@@ -57,8 +29,6 @@ sf::Vector2i Controller::CellToPosition(int i, int j)
 	return sf::Vector2i(P[0], P[1]);
 }
 
-
-
 void Controller::run(){
 	sf::RenderWindow window(sf::VideoMode(443, 450), "SudokuSolver", sf::Style::Close);
 	//Couleurs
@@ -67,6 +37,8 @@ void Controller::run(){
 	sf::Color BackColor= sf::Color(70, 70, 70, 255);
 	sf::Color HighlightColor = sf::Color(37, 190, 177, 255);
 	sf::Color ButtonColor = sf::Color(255, 127, 102, 255);
+	sf::Color GreenColor = sf::Color(45,193,109, 255);
+	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
 	Grille CurrentGrille;
@@ -81,12 +53,6 @@ void Controller::run(){
 		// error... 
 	}
 
-	sf::Text Temoin;
-	Temoin.setPosition(sf::Vector2f(300, 15));
-	Temoin.setFont(font);
-	Temoin.setString(std::to_string(Controller::CellToPosition(2,3).x)+ " " + std::to_string(Controller::CellToPosition(2, 3).y));
-	Temoin.setCharacterSize(20);
-	Temoin.setColor(sf::Color::Black);
 
 	//Definition des dessin FIXES
 	//Dessin grille
@@ -94,15 +60,12 @@ void Controller::run(){
 	
 
 	//Grille
-	Button RectGrille=Button::Button("GRI",CellColor);
+	Button RectGrille=Button::Button(CellColor,sf::Vector2f(15,15),sf::Vector2f(274,274), &font,"" , sf::Color(255,255,255,100));
 	RectGrille.setSize(sf::Vector2f(274, 274));
 	RectGrille.setOutlineThickness(0);
 	RectGrille.setPosition(sf::Vector2f(15, 15));
 
 	Button ButtonCell[9][9];
-	void(*Activerij)();
-	//Activerij = &(ActiverCell(0,0,0));
-	
 	//ButtonCells
 	for (int i = 0; i <= 8; ++i) {
 		for (int j = 0; j <= 8; ++j) {
@@ -146,7 +109,7 @@ void Controller::run(){
 	CancelButton.Texte=LinkedTexte(CancelButton, &font,  "Annuler", sf::Color::Black);*/
 	
 	Button SolveButton = Button(
-		sf::Color(0,230,0,255),
+		GreenColor,
 		sf::Vector2f(15, 304),
 		sf::Vector2f(274, 50),
 		&font,
@@ -272,7 +235,6 @@ void Controller::run(){
 				Position = sf::Mouse::getPosition();
 				
 				if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-						Temoin.setString("Inbound");
 						for (int i = 0; i <= 8; ++i) {
 							for (int j = 0; j <= 8; ++j) {
 								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
@@ -327,10 +289,13 @@ void Controller::run(){
 			case sf::Event::KeyPressed:
 				
 				switch (event.key.code) {
-				//Si espace, fermer
+				/*
+
+				//---Si espace, fermer---
 				case sf::Keyboard::Space:
 					window.close();
-					break;
+					break;*/
+
 				//Valeurs de suppression
 				case sf::Keyboard::Numpad0 :
 					ButtonVal[0].CallHandler();
@@ -386,21 +351,18 @@ void Controller::run(){
 				case sf::Keyboard::Left:
 					if (ActiveCell[0] == 1 & ActiveCell[1] > 0 ) { 
 						//Si une cellule est active + si on n'est pas dans la colonne tout à gauche
-						std::cout << "L" << std::endl;
 						ButtonCell[ActiveCell[1]-1][ActiveCell[2]].CallHandler();
 						break;
 					}
 					break;
 				case sf::Keyboard::Right:
 					if (ActiveCell[0] == 1 & ActiveCell[1] < 8) {
-						std::cout << "R" << std::endl;
 						ButtonCell[ActiveCell[1]+1][ActiveCell[2]].CallHandler();
 						break;
 					}
 					break;
 				case sf::Keyboard::Up:
 					if (ActiveCell[0] == 1 & ActiveCell[2] > 0) {
-						std::cout << "U" << std::endl;
 						ButtonCell[ActiveCell[1]][ActiveCell[2]-1].CallHandler();
 						break;
 					}

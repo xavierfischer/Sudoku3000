@@ -43,7 +43,7 @@ sf::Vector2f Button::Centering(sf::Text text) {
 
 }
 
-Button::Button(int I, int J, sf::Color color)
+/*Button::Button(int I, int J, sf::Color color)
 {
 	CODE = "CEL";
 	i = I;
@@ -58,7 +58,8 @@ Button::Button(std::string code, sf::Color color)
 	j = 0;
 	setFillColor(color);
 
-}
+}*/
+
 void Button::AddHandler(std::function<void()> const &func)
 {
 	handler = func;

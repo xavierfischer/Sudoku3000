@@ -13,8 +13,8 @@ public:
 	void CallHandler();
 
 	void execute();
-	Button(int I, int J, sf::Color color);
-	Button(std::string code, sf::Color color);
+	//Button(int I, int J, sf::Color color);
+	//Button(std::string code, sf::Color color);
 	Button();
 	Button(sf::Color colorFB,
 		sf::Vector2f positionB,
