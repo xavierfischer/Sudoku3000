@@ -27,8 +27,8 @@ namespace Tests
 		{
 
 			for (int i = 0; i < 9; i++) {
-				Assert::AreEqual(0,(*regionD.getCell(i)).value);
-				int j = (*regionA.getCell(i)).value;
+				Assert::AreEqual(0,(*regionD.getCell(i)).getValue());
+				int j = (*regionA.getCell(i)).getValue();
 				Assert::AreEqual(j, i + 1);
 			}
 		}

@@ -11,9 +11,9 @@ namespace Tests
 		TEST_METHOD(Création_de_cellule)
 		{
 			Cellule cellA;
-			Assert::AreEqual(cellA.value, 0);
+			Assert::AreEqual(cellA.getValue(), 0);
 			Cellule cellB(5);
-			Assert::AreEqual(cellB.value, 5);
+			Assert::AreEqual(cellB.getValue(), 5);
 		}
 	};
 }

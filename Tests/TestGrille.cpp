@@ -13,7 +13,7 @@ namespace Tests
 			Grille grille;
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					Assert::AreEqual((*grille.getCell(i, j)).value, 0);
+					Assert::AreEqual((*grille.getCell(i, j)).getValue(), 0);
 				}
 			}
 
@@ -27,13 +27,13 @@ namespace Tests
 			Grille grill;
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					(*grill.getCell(i, j)).value = 5;
+					(*grill.getCell(i, j)).setValue(5);
 				}
 			}
 
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					Assert::AreEqual((*grill.getCell(i, j)).value, 5);
+					Assert::AreEqual((*grill.getCell(i, j)).getValue(), 5);
 				}
 			}
 
