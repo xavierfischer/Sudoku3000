@@ -27,8 +27,8 @@ namespace Tests
 		{
 
 			for (int i = 0; i < 9; i++) {
-				Assert::AreEqual(0,(*regionD.getCell(i)).value);
-				int j = (*regionA.getCell(i)).value;
+				Assert::AreEqual(0,(*regionD.getCell(i)).getValue());
+				int j = (*regionA.getCell(i)).getValue();
 				Assert::AreEqual(j, i + 1);
 			}
 		}
@@ -39,6 +39,22 @@ namespace Tests
 			Assert::IsTrue(regionB.isConsistent());
 			Assert::IsFalse(regionC.isConsistent());
 			Assert::IsTrue(regionD.isConsistent());
+
+			Grille grille = Grille::createTemplate();
+			for (int i = 0; i < 9; i++) {
+				NineUplet line = grille.getLine(i);
+				Assert::IsTrue(line.isConsistent());
+			}
+			for (int j = 0; j < 9; j++) {
+				NineUplet column = grille.getLine(j);
+				Assert::IsTrue(column.isConsistent());
+			}
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					NineUplet region = grille.getRegion(i, j);
+					Assert::IsTrue(region.isConsistent());
+				}
+			}
 		}
 
 		TEST_METHOD(Is_Nuple_Full)
@@ -47,6 +63,35 @@ namespace Tests
 			Assert::IsFalse(regionD.isFull());
 			Assert::IsFalse(regionB.isFull());
 			Assert::IsTrue(regionC.isFull());
+		}
+
+		TEST_METHOD(Is_Value_Present)
+		{
+			Assert::IsTrue(regionA.isPresent(3));
+			Assert::IsFalse(regionB.isPresent(1));
+			Assert::IsTrue(regionC.isPresent(1));
+			for (int i = 1; i < 10; i++) {
+				Assert::IsFalse(regionD.isPresent(i));
+			}
+
+			Grille grille = Grille::createTemplate();
+
+			for (int k = 1; k < 10; k++) {
+				for (int i = 0; i < 9; i++) {
+					NineUplet line = grille.getLine(i);
+					Assert::IsTrue(line.isPresent(k));
+				}
+				for (int j = 0; j < 9; j++) {
+					NineUplet column = grille.getLine(j);
+					Assert::IsTrue(column.isPresent(k));
+				}
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					NineUplet region = grille.getRegion(i, j);
+					Assert::IsTrue(region.isPresent(k));
+				}
+			}
+				}
 		}
 	};
 }

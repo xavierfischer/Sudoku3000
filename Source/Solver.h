@@ -11,6 +11,9 @@ public:
     void initiate();
 	void update(int, int);
 	void humanSolve();
+	bool* getPossibilities(int, int);
+	static void calcPoss(NineUplet &region, NineUplet &line, NineUplet &column, bool(*localPossibilities)[9]);
+
 private:
 	Grille grid;
 	bool possibilities [9][9][9];

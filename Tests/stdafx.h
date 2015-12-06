@@ -10,7 +10,7 @@
 #include "../Source/Cellule.h"
 #include "../Source/NineUplet.h"
 #include "../Source/Grille.h"
-
+#include "../Source/Solver.h"
 
 // Headers for CppUnitTest
 #include "CppUnitTest.h"

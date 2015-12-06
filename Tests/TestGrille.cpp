@@ -13,7 +13,7 @@ namespace Tests
 			Grille grille;
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					Assert::AreEqual((*grille.getCell(i, j)).value, 0);
+					Assert::AreEqual((*grille.getCell(i, j)).getValue(), 0);
 				}
 			}
 
@@ -24,21 +24,27 @@ namespace Tests
 
 		TEST_METHOD(Création_de_grille_pleine)
 		{
-			Grille grill;
+			Grille grille;
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					(*grill.getCell(i, j)).value = 5;
+					(*grille.getCell(i, j)).setValue(5);
 				}
 			}
 
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					Assert::AreEqual((*grill.getCell(i, j)).value, 5);
+					Assert::AreEqual((*grille.getCell(i, j)).getValue(), 5);
 				}
 			}
 
-			Assert::IsFalse(grill.isConsistent());
-			Assert::IsTrue(grill.isFull());
+			Assert::IsFalse(grille.isConsistent());
+			Assert::IsTrue(grille.isFull());
+		}
+
+		TEST_METHOD(Grille_Complete) {
+			Grille grille = Grille::createTemplate();
+			Assert::IsTrue(grille.isFull());
+			Assert::IsTrue(grille.isConsistent());
 		}
 	};
 }
