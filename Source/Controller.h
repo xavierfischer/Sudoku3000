@@ -7,6 +7,7 @@
 #include "Cellule.h"
 #include "Button.h"
 #include "Controller.h"
+#include "Grille.h"
 
 
 class Controller 
