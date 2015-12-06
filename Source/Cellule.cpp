@@ -19,6 +19,6 @@ bool Cellule::isEmpty() {
         return true;
     }
     else {
-        return false;
+        return value==0;
     }
 }
