@@ -11,6 +11,7 @@ public:
     Cellule (int);
 	int value;
 	isEmpty();
+	Cellule::getvalue(int , int );
 };
 
 #endif /* defined(__Sudoku__Cell__) */
