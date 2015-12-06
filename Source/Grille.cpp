@@ -49,17 +49,17 @@ NineUplet Grille::getRegionFromCell(int i, int j)
 NineUplet Grille::getRegion(int regionI, int regionJ)
 {
 	if (regionI < 3 && regionI >= 0 && regionJ < 3 && regionJ >= 0) {
-		Cellule *array[9];
+		Cellule *myArray[9];
 		int startI = regionI * 3;
 		int startJ = regionJ * 3;
 		int count = 0;
 		for (int i = startI; i < startI + 3; i++) {
 			for (int j = startJ; i < startJ + 3; j++) {
-				array[count] = &cells[i][j];
+				myArray[count] = &cells[i][j];
 				count++;
 			}
 		}
-		return NineUplet(array);
+		return NineUplet(myArray);
 	}
 	else {
 		throw std::out_of_range("Cell value must be between 0 and 9");
@@ -72,11 +72,11 @@ NineUplet Grille::getRegion(int regionI, int regionJ)
 
 NineUplet Grille::getLine(int i) {
 	if (i < 9 && i >= 0) {
-		Cellule *array[9];
+		Cellule *myArray[9];
 		for (int j = 0; j < 9; j++) {
-			array[j] = &cells[i][j];
+			myArray[j] = &cells[i][j];
 		}
-		return NineUplet(array);
+		return NineUplet(myArray);
 	}
 	else {
 		throw std::out_of_range("Cell value must be between 0 and 10");
@@ -90,11 +90,11 @@ NineUplet Grille::getLine(int i) {
 
 NineUplet Grille::getColumn(int j) {
 	if (j < 9 && j >= 0) {
-		Cellule *array[9];
+		Cellule *myArray[9];
 		for (int i = 0; i < 9; i++) {
-			array[i] = &cells[i][j];
+			myArray[i] = &cells[i][j];
 		}
-		return NineUplet(array);
+		return NineUplet(myArray);
 	}
 	else {
 		throw std::out_of_range("Cell value must be between 0 and 10");
