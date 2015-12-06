@@ -11,11 +11,15 @@ LastCellFinder::LastCellFinder(NineUplet n) :nineUplet(n) {}
 */
 
 bool LastCellFinder::fill() {
-	return true;
-	/*
-	if (nineUplet.isConsistent) {
-
+	//nineUplet.getCells();
+	if (nineUplet.isConsistent()) {
+		for (int i = 0; i < 9; i++) {
+			//int v = nineUplet.getCells()[i].value;
+		}
 	}
+	return false;
+}
+	/*
 	a = nineUplet.getCells
 
     //On copie les cellules dans un tableau
@@ -61,4 +65,3 @@ bool LastCellFinder::fill() {
         return true;
     }
     return false;*/
-}

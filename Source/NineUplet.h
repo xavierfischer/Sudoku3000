@@ -11,6 +11,9 @@ public:
 	NineUplet(Cellule *a[9]);
 	bool isConsistent();
 	Cellule **getCells();
+	bool isPresent(int n);
+	bool isFull();
+	Cellule *getCell(int);
 private:
 	Cellule *cells[9];
 };

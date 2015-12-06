@@ -103,3 +103,42 @@ NineUplet Grille::getColumn(int j) {
 		throw std::out_of_range("Cell value must be between 0 and 10");
 	}
 }
+
+Cellule *Grille::getCell(int i, int j) {
+	return &cells[i][j];
+}
+
+bool Grille::isConsistent() {
+	bool result = true;
+	for (int i = 0; i < 9; i++) {
+		result = result && getLine(i).isConsistent();
+		if (!result)
+			return result;
+	}
+
+	for (int j = 0; j < 9; j++) {
+		result = result && getColumn(j).isConsistent();
+		if (!result)
+			return result;
+	}
+
+	for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			result = result && getRegion(i, j).isConsistent();
+		}
+		if (!result)
+			return result;
+	}
+
+	return true;
+}
+
+bool Grille::isFull() {
+	bool result = true;
+	for (int i = 0; i < 9; i++) {
+		result = result && getLine(i).isFull();
+		if (!result)
+			return result;
+	}
+	return true;
+}
