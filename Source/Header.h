@@ -7,6 +7,7 @@
 #include <string>
 #include <list>
 #include <exception>
+#include <stdexcept> 
 using namespace std;
 
 #endif

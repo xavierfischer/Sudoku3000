@@ -14,11 +14,9 @@ public:
 	Grille();
 	Grille(int *a[9]);
 
-	NineUplet getRegion(int, int);
-	NineUplet getLine(int, int);
-	NineUplet getColumn(int, int);
+	NineUplet getRegionFromCell(int, int);
 
-	NineUplet getRegion(int);
+	NineUplet getRegion(int, int);
 	NineUplet getLine(int);
 	NineUplet getColumn(int);
 
