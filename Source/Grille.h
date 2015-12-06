@@ -4,8 +4,6 @@
 
 #include <stdio.h>
 #include "Header.h"
-#include "Region.h"
-#include "RegionHolder.h"
 #include "Cellule.h"
 #include "NineUplet.h"
 

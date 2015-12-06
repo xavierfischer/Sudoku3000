@@ -9,7 +9,11 @@
 */
 
 Grille::Grille() {
-	Cellule cells[9][9];
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			cells[i][j].value = 0;
+		}
+	}
 }
 
 /*
@@ -18,10 +22,9 @@ Grille::Grille() {
 
 Grille::Grille(int * a[9])
 {
-	Cellule cells[9][9];
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
-			cells[i][j] = Cellule();
+			cells[i][j].value=a[i][j];
 		}
 	}
 }
@@ -54,7 +57,7 @@ NineUplet Grille::getRegion(int regionI, int regionJ)
 		int startJ = regionJ * 3;
 		int count = 0;
 		for (int i = startI; i < startI + 3; i++) {
-			for (int j = startJ; i < startJ + 3; j++) {
+			for (int j = startJ; j < startJ + 3; j++) {
 				myArray[count] = &cells[i][j];
 				count++;
 			}

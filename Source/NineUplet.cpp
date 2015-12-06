@@ -5,7 +5,6 @@
 */
 
 NineUplet::NineUplet(Cellule *a[9]){
-	Cellule *cells[9];
 	for (int i = 0; i < 9; i++) {
 		cells[i] = a[i];
 	}
@@ -22,4 +21,8 @@ bool NineUplet::isConsistent() {
 		}
 	}
 	return true;
+}
+
+Cellule **NineUplet::getCells() {
+	return cells;
 }

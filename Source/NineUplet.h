@@ -10,6 +10,7 @@ class NineUplet {
 public:
 	NineUplet(Cellule *a[9]);
 	bool isConsistent();
+	Cellule **getCells();
 private:
 	Cellule *cells[9];
 };
