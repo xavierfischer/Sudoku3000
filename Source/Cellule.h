@@ -2,7 +2,8 @@
 #ifndef __Sudoku__Cell__
 #define __Sudoku__Cell__
 
-#include <stdio.h>
+#include <stdexcept>
+#include "Header.h"
 
 class Cellule {
 public:
