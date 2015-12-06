@@ -15,6 +15,7 @@ Cellule::Cellule() {
 Cellule::Cellule(int n){
 	value = n;
 }
+<<<<<<< HEAD
 bool Cellule::isEmpty() {
     if (value==0) {
         return true;
@@ -30,3 +31,8 @@ this->value = alue;
     print Cellule([i],[j])
     return *this;
 }
+=======
+void Cellule::setValue(int n) {
+	value = n;
+}
+>>>>>>> origin/MoussInterface

@@ -16,6 +16,10 @@ Grille::Grille() {
 	}
 }
 
+Cellule *Grille::getCell(int i, int j) {
+	return &cells[i][j];
+}
+
 /*
 	Constructeur à partir de données entières : toutes les cellules sont initialisées par les valeurs données
 */

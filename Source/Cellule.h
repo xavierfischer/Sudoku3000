@@ -10,9 +10,14 @@ public:
 	Cellule();
     Cellule (int);
 	int value;
+<<<<<<< HEAD
 	isEmpty();
 	Cellule::getvalue(int,int);
 	isguess();
+=======
+	bool isFixed;
+	void setValue(int);
+>>>>>>> origin/MoussInterface
 };
 
 #endif /* defined(__Sudoku__Cell__) */
