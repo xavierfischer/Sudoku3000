@@ -50,7 +50,7 @@ void Controller::run(){
 	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
-	Grille CurrentGrille;
+	Grille CurrentGrille = Grille::createTemplateMissing();
 	std::cout << (*CurrentGrille.getCell(1, 2)).getValue() << std::endl;
 	
 	//Elements de controles

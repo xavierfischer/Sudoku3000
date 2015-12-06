@@ -180,3 +180,7 @@ Grille Grille::createTemplateMissing() {
 	Grille grille(data);
 	return grille;
 }
+
+bool Grille::isCellConsistent(int i, int j) {
+	return false;
+}

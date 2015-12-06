@@ -26,9 +26,13 @@ public:
 	static Grille createTemplate();
 	static Grille createTemplateMissing();
 
+	bool isCellConsistent(int, int);
+
 private: 
 	Cellule cells[9][9];
 
 };
+
+
 
 #endif /* defined(__Sudoku__Grid__) */
