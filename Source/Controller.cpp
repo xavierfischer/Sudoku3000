@@ -8,6 +8,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include "Cell.h"
+//#include "Grille.h"
 
 
 
@@ -17,14 +19,14 @@ Controller::Controller()
 	
 }
 
-int * Controller::CellToPosition(int i, int j)
+sf::Vector2i Controller::CellToPosition(int i, int j)
 {
 	int P[2];
 	
 
-	P[0] = 15 + i * 30 + (i % 3) * 2;// 15 pour la marge, i*30 pour la position de la cellule, décalée de 2 pixels à chaque fois qu'on passe dans la région suivante
-	P[1] = 15 + j * 30 + (j % 3) * 2; //idem
-	return P;
+	P[0] = 15 + i * 30 + (i / 3) * 2;// 15 pour la marge, i*30 pour la position de la cellule, décalée de 2 pixels à chaque fois qu'on passe dans la région suivante
+	P[1] = 15 + j * 30 + (j / 3) * 2; //idem
+	return sf::Vector2i(P[0], P[1]);
 }
 
 
@@ -38,7 +40,9 @@ void Controller::run(){
 	sf::Color HighlightColor = sf::Color(37, 190, 177, 255);
 	sf::Color ButtonColor = sf::Color(255, 127, 102, 255);
 
-	
+	sf::Vector2i Position; //Position de la souris
+	//Grille CurrentGrille;
+
 
 	sf::Font font;
 	if (!font.loadFromFile("arial_narrow_7.ttf"))
@@ -46,28 +50,39 @@ void Controller::run(){
 		// error... 
 	}
 
+	sf::Text Temoin;
+	Temoin.setPosition(sf::Vector2f(300, 15));
+	Temoin.setFont(font);
+	Temoin.setString(std::to_string(Controller::CellToPosition(2,3).x)+ " " + std::to_string(Controller::CellToPosition(2, 3).y));
+	Temoin.setCharacterSize(20);
+	Temoin.setColor(sf::Color::Black);
+
 	//Definition des dessin FIXES
 	//Dessin grille
 
 	
 
 	//Grille
-	Button ButtonGrille=Button::Button("GRI",CellColor);
-	ButtonGrille.setSize(sf::Vector2f(274, 274));
-	ButtonGrille.setOutlineColor(sf::Color::Transparent);
-	ButtonGrille.setOutlineThickness(0);
-	ButtonGrille.setPosition(15, 15);
+	Button RectGrille=Button::Button("GRI",CellColor);
+	RectGrille.setSize(sf::Vector2f(274, 274));
+	RectGrille.setOutlineThickness(0);
+	RectGrille.setPosition(sf::Vector2f(15, 15));
 
-	Button ButtonCell[9][9]{};
-	for (int i = 1; i <= 9; ++i) {
-		for (int j = 1; j <= 9; ++j) {
-			//ButtonCell[i][j].setFillColor(sf::Color::Transparent);
-			//ButtonCell[i][j].setSize(sf::Vector2f(30, 30));
-			//ButtonCell[i][j].setOutlineColor(sf::Color::Transparent);
-			//ButtonCell[i][j].CODE = std::string("CEL");
-			//ButtonCell[i][j].setPosition(sf::Vector2f(CellToPosition(i, j)[0], CellToPosition(i, j)[1]));
+	Button ButtonCell[9][9];
+
+	
+
+	for (int i = 0; i <= 8; ++i) {
+		for (int j = 0; j <= 8; ++j) {
+			
+			ButtonCell[i][j].setFillColor(sf::Color::Transparent);
+			ButtonCell[i][j].setSize(sf::Vector2f(30, 30));
+			ButtonCell[i][j].CODE = "CEL";
+			ButtonCell[i][j].setPosition(CellToPosition(i, j).x, CellToPosition(i, j).y);
+
 		}
 	}
+	
 
 
 	//grille par dessus le reste
@@ -147,7 +162,7 @@ void Controller::run(){
 		//Gestion des events
 		sf::Event event;
 
-		while (window.pollEvent(event))
+		if (window.pollEvent(event))
 		{
 			// check the type of the event...
 			switch (event.type)
@@ -158,18 +173,42 @@ void Controller::run(){
 				break;
 
 			case sf::Event::MouseMoved:
-				//TODO Highlights
+				Position = sf::Mouse::getPosition();
+				
+				/*if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						Temoin.setString("Inbound");
+
+						for (int i = 0; i <= 8; ++i) {
+							for (int j = 0; j <= 8; ++j) {
+								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+									ButtonCell[i][j].setFillColor(BackColor);
+								}
+							}
+						}
+					}*/
+				
 				continue;
 
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left) {
+					Position = sf::Mouse::getPosition(window);
 					//TODO event action
-					
-
-
-
-
-
+					if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						for (int i = 0; i <= 8; ++i) {
+							for (int j = 0; j <= 8; ++j) {
+								if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+									ButtonCell[i][j].setFillColor(BackColor);
+									//Controller::ActiveCell = CurrentGrille.Cell(i, j);
+								}
+								else {
+									ButtonCell[i][j].setFillColor(CellColor);
+								}
+							}
+						}
+					}
+					else {
+						Temoin.setString("Outbound");
+					}
 				}
 
 
@@ -197,8 +236,13 @@ void Controller::run(){
 
 		//Drawing
 		window.clear(BackColor);
-		//window.draw(sprite);
-		window.draw(ButtonGrille);
+		
+		window.draw(RectGrille);
+		for (int i = 0; i <= 8; ++i) {
+			for (int j = 0; j <= 8; ++j) {
+				window.draw(ButtonCell[i][j]);
+			}
+		}
 
 		//Mettre le highlight ici
 		window.draw(Plinev, 12, sf::Lines);
@@ -207,6 +251,8 @@ void Controller::run(){
 		window.draw(Glinev2);
 		window.draw(Glineh1);
 		window.draw(Glineh2);
+		window.draw(Temoin);
+		
 
 
 		//window.draw(shape);
