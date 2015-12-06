@@ -7,7 +7,7 @@
 #include <string>
 #include <list>
 #include <exception>
-#include "Cell.h"
+#include <stdexcept> 
 using namespace std;
 
 #endif

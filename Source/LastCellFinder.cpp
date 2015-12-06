@@ -1,9 +1,22 @@
-//Cette classe permet de trouver la derniere cellule pour chaque region.
 #include "LastCellFinder.h"
 
-LastCellFinder::LastCellFinder(TripleHolder &tri1, TripleHolder &tri2, TripleHolder &tri3):triplet1(tri1),triplet2(tri2),triplet3(tri3){}
+/*
+	Cette classe permet de trouver la derniere cellule pour chaque region.
+*/
+
+LastCellFinder::LastCellFinder(NineUplet n) :nineUplet(n) {}
+
+/*
+	Cette classe complète si possible le nineUple donné et renvoie true si une modification a eu lieu
+*/
 
 bool LastCellFinder::fill() {
+	return true;
+	/*
+	if (nineUplet.isConsistent) {
+
+	}
+	a = nineUplet.getCells
 
     //On copie les cellules dans un tableau
     Cell tableCells[9];
@@ -47,5 +60,5 @@ bool LastCellFinder::fill() {
         triplet3=TripleHolder(tableCells[6], tableCells[7], tableCells[8]);
         return true;
     }
-    return false;
+    return false;*/
 }
