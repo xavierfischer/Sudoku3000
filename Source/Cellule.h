@@ -11,7 +11,8 @@ public:
     Cellule (int);
 	int value;
 	isEmpty();
-	Cellule::getvalue(int , int );
+	Cellule::getvalue(int,int);
+	isguess();
 };
 
 #endif /* defined(__Sudoku__Cell__) */
