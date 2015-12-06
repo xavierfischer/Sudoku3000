@@ -25,11 +25,14 @@ public:
 
 	static Grille createTemplate();
 	static Grille createTemplateMissing();
+	static Grille createTemplateWrong();
 
-	bool isCellConsistent(int, int);
+	list<list<int>> getUnconsistentCells(int, int);
 
 private: 
 	Cellule cells[9][9];
+	static bool areInSameRegion(int, int, int, int);
+
 
 };
 

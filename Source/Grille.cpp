@@ -181,6 +181,58 @@ Grille Grille::createTemplateMissing() {
 	return grille;
 }
 
-bool Grille::isCellConsistent(int i, int j) {
-	return false;
+/*
+	Template grid with inconsistent cells
+*/
+
+Grille Grille::createTemplateWrong() {
+	int l1[9] = { 1,1,3,4,5,6,7,8,9 };
+	int l2[9] = { 4,5,6,7,8,9,1,0,3 };
+	int l3[9] = { 7,8,9,1,0,3,4,5,6 };
+	int l4[9] = { 0,3,4,5,6,7,8,9,1 };
+	int l5[9] = { 5,6,7,8,9,1,0,3,4 };
+	int l6[9] = { 8,9,1,0,3,4,5,6,7 };
+	int l7[9] = { 9,1,0,3,4,5,6,7,8 };
+	int l8[9] = { 3,4,5,6,7,8,9,1,0 };
+	int l9[9] = { 6,7,8,9,0,2,3,4,5 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+/*
+	Donne les coordonnées des cellules incohérentes avec la cellule en paramètre
+*/
+
+list<list<int>> Grille::getUnconsistentCells(int i, int j) {
+	list<list<int>> result;
+	Cellule cell = *getCell(i, j);
+	for (int x = 0; x < 9; x++) {
+		for (int y = 0; y < 9; y++) {
+			Cellule lookedCell = *getCell(x,y);
+			if (x != i || y != j) {
+				if (lookedCell.getValue() == cell.getValue()) {
+					if (x == i || y==j || areInSameRegion(i,j,x,y)) {
+						list<int> c = { x,y };
+						result.push_front(c);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+/*
+	Dit si deux coordonnées sont dans la même région
+*/
+
+bool Grille::areInSameRegion(int i, int j, int x, int y) {
+	if (i < 9 && i >= 0 && j < 9 && j >= 0) {
+		int regionI = (i - (i % 3)) / 3;
+		int regionJ = (j - (j % 3)) / 3;
+		int regionX = (x - (x % 3)) / 3;
+		int regionY = (y - (y % 3)) / 3;
+		return regionI == regionX && regionJ == regionY;
+	}
 }

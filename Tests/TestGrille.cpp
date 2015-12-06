@@ -46,5 +46,33 @@ namespace Tests
 			Assert::IsTrue(grille.isFull());
 			Assert::IsTrue(grille.isConsistent());
 		}
+
+		TEST_METHOD(Unconsistent_Finding_In_Consistent_Grid) {
+			Grille grille = Grille::createTemplate();
+			
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					list<list<int>> unconstistentCells = grille.getUnconsistentCells(i, j);
+					Assert::AreEqual((int) unconstistentCells.size(), 0);
+				}
+			}
+		}
+
+		TEST_METHOD(Unconsistent_Finding_In_Unconsistent_Grid) {
+
+			Grille grille = Grille::createTemplateWrong();
+			list<list<int>> unconstistentCells = grille.getUnconsistentCells(0,0);
+			Assert::AreEqual((int)unconstistentCells.size(), 1);
+			list<int> unconsistentCoord = unconstistentCells.front();
+
+			//La coordonnée incohérente doit être (0,1)
+			Assert::AreEqual(unconsistentCoord.front(), 0);
+			Assert::AreEqual(unconsistentCoord.back(), 1);
+
+			unconstistentCells = grille.getUnconsistentCells(0, 1);
+			Assert::AreEqual((int)unconstistentCells.size(), 2);
+			unconsistentCoord = unconstistentCells.front();
+		}
+
 	};
 }
