@@ -10,7 +10,7 @@ LastCellFinder::LastCellFinder(NineUplet n) :nineUplet(n) {}
 	Cette classe complète si possible le nineUple donné et renvoie true si une modification a eu lieu
 */
 
-/*bool LastCellFinder::fill() {
+bool LastCellFinder::fill() {
 	//nineUplet.getCells();
 	if (nineUplet.isConsistent()) {
 		for (int i = 0; i < 9; i++) {
@@ -55,4 +55,4 @@ LastCellFinder::LastCellFinder(NineUplet n) :nineUplet(n) {}
 		return true;
 	}
 	return false;
-}*/
+}
