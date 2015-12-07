@@ -18,7 +18,6 @@ public:
 	sf::RectangleShape HighRegion;
 	Controller();
 	sf::Vector2i CellToPosition(int x, int y);
-	void PoliceDesCellules(Grille * grid, Button(*buttonCell)[9][9], int I, int J, bool clear);
 	void run();
 	void MaJHighlights(int i, int j);
 	bool HighlightsGrid = false;

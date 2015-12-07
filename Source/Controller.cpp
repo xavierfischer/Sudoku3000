@@ -38,18 +38,14 @@ void Controller::MaJHighlights(int i , int j) {
 
 
 
-void Controller::PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
+void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
 {
 	
 	for (int i = 0; i <= 8; ++i) {
-		//std::cout << "on entame une boucle" << std::endl;
 		for (int j = 0; j <= 8; ++j) {
 			(*buttonCell)[i][j].setOutlineColor(sf::Color::White);
-			(*buttonCell)[i][j].Texte.setColor(sf::Color::Black);
-			if (ValuesHelp & !((*(*grid).getCell(i, j)).isFixed)) {
-				(*buttonCell)[i][j].Texte.setColor(sf::Color::Blue);
-			}
-
+			(*buttonCell)[i][j].Texte.setColor((*buttonCell)[i][j].colorT);
+			
 		}
 	}
 	if (!clear) { //Si on est pas dans une fonction de 'clear', on met les cellules en rouge si besoin
@@ -110,18 +106,20 @@ void Controller::run(){
 	for (int i = 0; i <= 8; ++i) {
 		for (int j = 0; j <= 8; ++j) {
 			//Constructeur de ButtonCells
-			ButtonCell[i][j] = Button(sf::Color::Transparent,
-				sf::Vector2f(CellToPosition(i, j).x+1, CellToPosition(i, j).y+1),
-				sf::Vector2f(27, 27),
-				&font,
-				" ",
-				sf::Color::Black
-				);
-			std::cout << std::to_string((*CurrentGrille.getCell(i, j)).isFixed) << std::endl;
 			if ((*CurrentGrille.getCell(i, j)).isFixed) {
-				std::cout << "yolo" << std::endl;
-				ButtonCell[i][j].Texte.setColor(sf::Color::Blue);
+				ButtonCell[i][j] = Button(sf::Color::Transparent,
+					sf::Vector2f(CellToPosition(i, j).x + 1, CellToPosition(i, j).y + 1), sf::Vector2f(27, 27), &font, " ",
+					sf::Color::Black
+					);
 			}
+			else {
+				ButtonCell[i][j] = Button(sf::Color::Transparent,
+					sf::Vector2f(CellToPosition(i, j).x + 1, CellToPosition(i, j).y + 1), sf::Vector2f(27, 27), &font, " ",
+					sf::Color::Blue
+					);
+			}
+			std::cout << std::to_string((*CurrentGrille.getCell(i, j)).isFixed) << std::endl;
+			
 			ButtonCell[i][j].setOutlineColor(sf::Color::White);
 			//Fonction du bouton
 			ButtonCell[i][j].AddHandler([&, i , j ]() {
@@ -305,8 +303,10 @@ void Controller::run(){
 	//--Handlers de modification
 	for (int i = 0; i <= 9; ++i) {
 		ButtonVal[i].AddHandler([&, i]() {
-			ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte.setColor(sf::Color::Black);
-			(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+			if ((*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).isFixed==false) {
+				(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+			}
+			
 
 			if (ConsistencyHelp ) {
 				/*if(! (CurrentGrille.isCellConsistent(ActiveCell[1], ActiveCell[2])) ){

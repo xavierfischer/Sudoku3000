@@ -18,6 +18,7 @@ Button::Button(sf::Color colorFB, sf::Vector2f positionB, sf::Vector2f sizeB, sf
 	Texte = LinkedTexte(fontT, stringT, colorT);
 	Centering();
 	Sizing();
+	Button::colorT = colorT;
 }
 
 sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {
