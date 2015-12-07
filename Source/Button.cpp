@@ -18,6 +18,7 @@ Button::Button(sf::Color colorFB, sf::Vector2f positionB, sf::Vector2f sizeB, sf
 	Texte = LinkedTexte(fontT, stringT, colorT);
 	Centering();
 	Sizing();
+	Button::colorF = colorFB;
 	Button::colorT = colorT;
 }
 
@@ -71,8 +72,9 @@ void Button::CallHandler()
 }
 
 void Button::EnfonceurButton() {
-	setOutlineColor(Button::getFillColor());
-	setFillColor(Button::Texte.getColor());
-	Texte.setColor(Button::getOutlineColor());
+	sf::Color tempColor = getFillColor();
+	setFillColor(Texte.getColor());
+	Texte.setColor(tempColor);
+	
 }
 
