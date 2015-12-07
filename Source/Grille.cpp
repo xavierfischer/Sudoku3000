@@ -175,7 +175,7 @@ Grille Grille::createTemplateMissing() {
 	int l6[9] = { 8,9,1,0,3,4,5,6,7 };
 	int l7[9] = { 9,1,0,3,4,5,6,7,8 };
 	int l8[9] = { 3,4,5,6,7,8,9,1,0 };
-	int l9[9] = { 6,7,8,9,0,2,3,4,5 };
+	int l9[9] = { 6,7,8,9,1,0,3,4,5 };
 	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
 	Grille grille(data);
 	return grille;

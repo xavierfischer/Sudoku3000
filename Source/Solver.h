@@ -8,17 +8,17 @@
 class Solver {
 
 public:
-    Solver(Grille);
+    Solver(Grille *grille);
     void initiate();
 	void update(int, int);
 
 	void hint();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
-	
+
 private:
-	Grille grid;
+	Grille *grid;
 	bool initiated = false;
-	list<Cellule> leftCells;
+	list<Possibilities> leftPossibilities;
 };
 #endif

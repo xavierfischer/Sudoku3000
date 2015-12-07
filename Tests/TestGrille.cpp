@@ -45,6 +45,8 @@ namespace Tests
 			Grille grille = Grille::createTemplate();
 			Assert::IsTrue(grille.isFull());
 			Assert::IsTrue(grille.isConsistent());
+			Grille grille2 = Grille::createTemplateMissing();
+			Assert::IsFalse(grille2.isFull());
 		}
 
 		TEST_METHOD(Unconsistent_Finding_In_Consistent_Grid) {

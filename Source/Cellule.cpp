@@ -21,12 +21,7 @@ Cellule::Cellule(int n){
 }
 
 bool Cellule::isEmpty() {
-    if (value==0) {
-        return true;
-    }
-    else {
-        return value==0;
-    }
+	return value == 0;
 }
 
 int Cellule::getValue()

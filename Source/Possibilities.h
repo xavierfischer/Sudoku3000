@@ -9,6 +9,11 @@ public:
 	void setPossibility(int, bool);
 	int possibles();
 	int resolve();
+	void setAllTo(bool);
+	void attach(int, int);
+	int attachedI;
+	int attachedJ;
+
 private:
 	bool possibilities[9];
 };
