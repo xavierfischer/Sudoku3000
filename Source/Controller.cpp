@@ -38,17 +38,18 @@ void Controller::MaJHighlights(int i , int j) {
 
 
 
-void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
+void Controller::PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
 {
-	//(*buttonCell[1][0]).setOutlineColor(sf::Color::Red);
-	//if ((*buttonCell[0][0]).getOutlineColor() == sf::Color::White) {
-	//	std::cout << "Youhou !" << std::endl;
-	//}
+	
 	for (int i = 0; i <= 8; ++i) {
 		//std::cout << "on entame une boucle" << std::endl;
 		for (int j = 0; j <= 8; ++j) {
 			(*buttonCell)[i][j].setOutlineColor(sf::Color::White);
 			(*buttonCell)[i][j].Texte.setColor(sf::Color::Black);
+			if (ValuesHelp & !((*(*grid).getCell(i, j)).isFixed)) {
+				(*buttonCell)[i][j].Texte.setColor(sf::Color::Blue);
+			}
+
 		}
 	}
 	if (!clear) { //Si on est pas dans une fonction de 'clear', on met les cellules en rouge si besoin
@@ -116,6 +117,11 @@ void Controller::run(){
 				" ",
 				sf::Color::Black
 				);
+			std::cout << std::to_string((*CurrentGrille.getCell(i, j)).isFixed) << std::endl;
+			if ((*CurrentGrille.getCell(i, j)).isFixed) {
+				std::cout << "yolo" << std::endl;
+				ButtonCell[i][j].Texte.setColor(sf::Color::Blue);
+			}
 			ButtonCell[i][j].setOutlineColor(sf::Color::White);
 			//Fonction du bouton
 			ButtonCell[i][j].AddHandler([&, i , j ]() {
