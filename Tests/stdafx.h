@@ -12,6 +12,7 @@
 #include "../Source/Grille.h"
 #include "../Source/Solver.h"
 #include "../Source/Possibilities.h"
+#include "../Source/MasterSolve.h"
 
 // Headers for CppUnitTest
 #include "CppUnitTest.h"
