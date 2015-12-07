@@ -19,25 +19,15 @@ bool LastCellFinder::fill() {
 	}
 	return false;
 }
-	/*
+
 	a = nineUplet.getCells
 
-    //On copie les cellules dans un tableau
-    Cell tableCells[9];
-    tableCells[0]=triplet1.getCell1();
-    tableCells[1]=triplet1.getCell2();
-    tableCells[2]=triplet1.getCell3();
-    tableCells[3]=triplet2.getCell1();
-    tableCells[4]=triplet2.getCell2();
-    tableCells[5]=triplet2.getCell3();
-    tableCells[6]=triplet3.getCell1();
-    tableCells[7]=triplet3.getCell2();
-    tableCells[8]=triplet3.getCell3();
+  
 
     int count=0;
     int count2=0;
     int pos=0;
-    int num=0;
+   
 
     //On compte le nombre de cellule vide
     for (int i=0; i<=8; i++) {
@@ -55,13 +45,13 @@ bool LastCellFinder::fill() {
                 }
             }//Si le nombre n'apparait pas
             if (count2==0) {
-                num=i;//Alors on le stocke dans num
+              
             }
         }
         tableCells[pos]=Cell((char)(((int)'0')+num));//On remplace la cellule vide par le nombre num
-        triplet1=TripleHolder(tableCells[0], tableCells[1], tableCells[2]);
-        triplet2=TripleHolder(tableCells[3], tableCells[4], tableCells[5]);
-        triplet3=TripleHolder(tableCells[6], tableCells[7], tableCells[8]);
+        triplet1=TripleHolder(tableCells[0], tableCells[3], tableCells[6]);
+        triplet2=TripleHolder(tableCells[1], tableCells[4], tableCells[7]);
+        triplet3=TripleHolder(tableCells[2], tableCells[5], tableCells[8]);
         return true;
     }
-    return false;*/
+    return false;

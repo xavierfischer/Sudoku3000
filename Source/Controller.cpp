@@ -35,8 +35,11 @@ void Controller::MaJHighlights(int i , int j) {
 	HighVertical.setPosition(sf::Vector2f(CellToPosition(i, j).x, 15));
 	HighRegion.setPosition(sf::Vector2f(CellToPosition(3 * (i / 3), 0).x, CellToPosition(0, 3 * (j / 3)).y));
 }
+
 /*
+
 void Controller::PoliceDesCellules(Grille *grid)
+
 {
 	list<list<int>> Errors=grid.getUnconsistentCells(int i, int j) { ... } Errors = grid.getUnconsistentCells(ActiveCell[1], ActiveCell[2]);
 
@@ -46,6 +49,7 @@ void Controller::PoliceDesCellules(Grille *grid)
 	}
 
 	}
+
 }
 */
 
