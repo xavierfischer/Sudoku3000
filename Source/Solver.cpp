@@ -69,6 +69,10 @@ void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet co
 	}
 }
 
+int *Solver::hintHuman() {
+	
+}
+
 int *Solver::hint() {
 	int coords[3] = { 0, 0, 0 };
 	if (leftPossibilities.size() > 0) {
