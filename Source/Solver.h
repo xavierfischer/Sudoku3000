@@ -8,19 +8,24 @@
 class Solver {
 
 public:
+	Solver();
     Solver(Grille *grille);
     void initiate();
 	void update(int, int, int);
 
-	void hint();
+	int *hint();
+	int *hintHuman();
 	bool isHintable();
+	bool isHintableHuman();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
+	int Solver::hintHumanInNuple(NineUplet nuple, int value);
 
 private:
 	Grille *grid;
 	bool initiated = false;
 	list<Possibilities> leftPossibilities;
 	bool hintable;
+	bool hintableHuman;
 };
 #endif

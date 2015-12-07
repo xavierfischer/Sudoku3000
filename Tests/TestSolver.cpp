@@ -98,6 +98,47 @@ namespace Tests
 
 		}
 
+		TEST_METHOD(Update) {
+
+			Grille grille;
+
+			Solver solver(&grille);
+			solver.initiate();
+
+			Cellule *cell00 = grille.getCell(0, 0);
+			NineUplet line = grille.getLine(0);
+			NineUplet region = grille.getRegionFromCell(0,0);
+			NineUplet column = grille.getColumn(0);
+
+			(*cell00).setValue(1);
+
+			Assert::AreEqual(1,(*grille.getCell(0, 0)).getValue());
+
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					Assert::IsTrue((*(*line.getCell(j)).getPossibilities()).getPossibility(i));
+					Assert::IsTrue((*(*region.getCell(j)).getPossibilities()).getPossibility(i));
+					Assert::IsTrue((*(*column.getCell(j)).getPossibilities()).getPossibility(i));
+				}
+			}
+
+			solver.update(0, 0, 1);
+
+			for (int i = 1; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					Assert::IsTrue((*(*line.getCell(j)).getPossibilities()).getPossibility(i));
+					Assert::IsTrue((*(*region.getCell(j)).getPossibilities()).getPossibility(i));
+					Assert::IsTrue((*(*column.getCell(j)).getPossibilities()).getPossibility(i));
+				}
+			}
+
+			for (int j = 0; j < 9; j++) {
+				Assert::IsFalse((*(*line.getCell(j)).getPossibilities()).getPossibility(0));
+				Assert::IsFalse((*(*region.getCell(j)).getPossibilities()).getPossibility(0));
+				Assert::IsFalse((*(*column.getCell(j)).getPossibilities()).getPossibility(0));
+			}
+		}
+
 		TEST_METHOD(Hint) {
 
 			Grille grille = Grille::createTemplateMissing();
@@ -124,7 +165,13 @@ namespace Tests
 			solver.initiate();
 
 			while (solver.isHintable()) {
-				solver.hint();
+				int *result = solver.hint();
+				int i = result[0];
+				int j = result[1];
+				int value = result[2]; // realValue
+				if (value != 0) {
+					solver.update(i,j,value);
+				}
 			}
 			
 			Assert::IsTrue(grille.isFull());
