@@ -54,4 +54,4 @@ bool LastCellFinder::fill() {
         triplet3=TripleHolder(tableCells[2], tableCells[5], tableCells[8]);
         return true;
     }
-    return false;*/
+    return false;
