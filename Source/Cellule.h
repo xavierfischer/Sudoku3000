@@ -4,7 +4,6 @@
 
 #include <stdexcept>
 #include "Header.h"
-#include "Possibilities.h"
 
 class Cellule {
 public:
@@ -12,13 +11,11 @@ public:
     Cellule (int);
 	int getValue();
 	bool isEmpty();
+	bool isGuess;
+	bool isFixed;
 	void setValue(int);
-	bool fixed;
-	Possibilities *getPossibilities();
-	
 private:
 	int value;
-	Possibilities possibilities;
 };
 
 #endif /* defined(__Sudoku__Cell__) */

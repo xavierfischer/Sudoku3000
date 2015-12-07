@@ -54,7 +54,7 @@ void Controller::PoliceDesCellules(Grille *grid)
 */
 
 void Controller::run(){
-	sf::RenderWindow window(sf::VideoMode(443, 450), "SudokuSolver", sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(419, 419), "SudokuSolver", sf::Style::Close);
 	//Couleurs
 	sf::Color CellColor = sf::Color(220, 220, 220, 255);
 	sf::Color GridColor= sf::Color(170, 170, 170, 255);
@@ -78,7 +78,7 @@ void Controller::run(){
 	bool HighlightsGrid = false;
 	bool HighlightsTheme = true;
 	bool ConsistencyHelp = false;
-
+	bool ValuesHelp = false;
 	
 	sf::Font font;
 	if (!font.loadFromFile("arial_narrow_7.ttf"))
@@ -123,8 +123,8 @@ void Controller::run(){
 	//---CancelButton
 	Button CancelButton = Button(
 		CancelColor, 
-		sf::Vector2f(304, 183),
-		sf::Vector2f(124, 40),
+		sf::Vector2f(304, 151),
+		sf::Vector2f(100,32),
 		&font,
 		"Annuler",
 		BackColor);
@@ -152,17 +152,38 @@ void Controller::run(){
 	//---SolveButton
 	Button SolveButton = Button(
 		GreenColor,
-		sf::Vector2f(15, 304),
-		sf::Vector2f(274, 50),
+		sf::Vector2f(15, 294),
+		sf::Vector2f(135, 50),
 		&font,
 		"Solve",
 		BackColor);
 
+	//---HintButton
+	Button HintButton = Button(
+		GreenColor,
+		sf::Vector2f(153, 294),
+		sf::Vector2f(135, 50),
+		&font,
+		"Hint",
+		BackColor);
+
+	//---Help Menu
+	Button HelpMenu = Button(
+		sf::Color::Cyan,
+		sf::Vector2f(304, 188),
+		sf::Vector2f(100, 32),
+		&font,
+		"Aide",
+		BackColor);
+	HelpMenu.setOutlineThickness(2);
+	HelpMenu.setOutlineColor(sf::Color::Cyan);
+	HelpMenu.setOutlineColor(BackColor);
+
 	//---ConsistencyHelpButton
 	Button CHelpButton = Button(
 		sf::Color::Cyan,
-		sf::Vector2f(304, 274+15-40),
-		sf::Vector2f(124, 40),
+		sf::Vector2f(304, 222),
+		sf::Vector2f(100, 32),
 		&font,
 		"Aide (off)",
 		BackColor);
@@ -183,14 +204,45 @@ void Controller::run(){
 		CHelpButton.EnfonceurButton();
 	});
 
+	//---PossibleValuesHelpButton
+	Button HelpValuesButton = Button(
+		sf::Color::Cyan,
+		sf::Vector2f(304, 256),
+		sf::Vector2f(100, 32),
+		&font,
+		"Values (off)",
+		BackColor);
+	HelpValuesButton.setOutlineThickness(2);
+	HelpValuesButton.setOutlineColor(BackColor);
+	HelpValuesButton.AddHandler([&]() {
+		if (ValuesHelp) {
+			ValuesHelp = false;
+			HelpValuesButton.Texte.setString("Values (off)");
+			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
+			
+		}
+		else {
+			ValuesHelp = true;
+			HelpValuesButton.Texte.setString("Values (on)");
+			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
+			if (ActiveCell[0] == 1) {
+				//PoliceDesCellules(&CurrentGrille);
+				
+			}
+			
+		}
+		HelpValuesButton.EnfonceurButton();
+		});
+	
+
 	//Buttons de modification des valeurs
 	Button ButtonVal[10];
 	//--Création boutons
 	for (int i = 1; i <= 9; ++i) {
 		ButtonVal[i] = Button(
 			ButtonColor,
-			sf::Vector2f(304 + ((i-1)%3) * 42, 15+ ((i - 1) / 3)*42),
-			sf::Vector2f(40, 40),
+			sf::Vector2f(304 + ((i-1)%3) * 34, 15+ ((i - 1) / 3)*34),
+			sf::Vector2f(32, 32),
 			&font,
 			std::to_string(i),
 			BackColor
@@ -199,8 +251,8 @@ void Controller::run(){
 	//--Bouton "supprimer"
 	ButtonVal[0] = Button(
 		ButtonColor,
-		sf::Vector2f(304 , 141),
-		sf::Vector2f(124, 40),
+		sf::Vector2f(304 , 117),
+		sf::Vector2f(100, 32),
 		&font,
 		"Effacer",
 		BackColor
@@ -581,8 +633,15 @@ void Controller::run(){
 		//--Bouton Solve
 		window.draw(SolveButton);
 		window.draw(SolveButton.Texte);
+		window.draw(HintButton);
+		window.draw(HintButton.Texte);
+		window.draw(HelpMenu);
+		window.draw(HelpMenu.Texte);
 		window.draw(CHelpButton);
 		window.draw(CHelpButton.Texte);
+		window.draw(HelpValuesButton);
+		window.draw(HelpValuesButton.Texte);
+
 		
 
 		//Higlights

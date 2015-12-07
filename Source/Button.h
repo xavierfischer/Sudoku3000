@@ -23,6 +23,7 @@ public:
 	sf::Text Texte;
 	sf::Text LinkedTexte(sf::Font *font, std::string str, sf::Color color);
 	sf::Vector2f Centering(sf::Text text);
+	float Sizing(sf::Text text);
 
 private:
 	std::function<void()> handler;

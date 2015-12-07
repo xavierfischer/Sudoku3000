@@ -41,6 +41,23 @@ sf::Vector2f Button::Centering(sf::Text text) {
 
 }
 
+float Button::Sizing(sf::Text text) {
+	float x = getSize().x;
+	float y = getSize().y;
+	float Rx = 0.8; //coefficients de remplissage max vertical et horizontal
+	float Ry = 0.9;
+	float Sx = Ry * getSize().y / 0.4 * text.getString().getSize();
+	float Sy = Ry * getSize().y;
+
+	if (Sx < Sy) {
+		return Sx;
+	}
+	else {
+		return Sy;
+	}
+
+}
+
 void Button::AddHandler(std::function<void()> const &func)
 {
 	handler = func;

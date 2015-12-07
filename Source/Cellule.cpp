@@ -10,13 +10,13 @@
 // Constructeur par défaut
 Cellule::Cellule() {
 	value = 0;
-	fixed = false;
+	isFixed = false;
 }
 Cellule::Cellule(int n){
 	value = n;
-	fixed = true;
+	isFixed = true;
 	for (int i = 0; i < 10; i++) {
-		possibilities.setPossibility(i, false);
+		//possibilities.setPossibility(i, false);
 	}
 }
 
@@ -38,7 +38,7 @@ void Cellule::setValue(int n) {
 	value = n;
 }
 
-Possibilities *Cellule::getPossibilities() {
+/*Possibilities *Cellule::getPossibilities() {
 	return &possibilities;
-}
+}*/
 
