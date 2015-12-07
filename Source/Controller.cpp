@@ -173,7 +173,9 @@ void Controller::run(){
 		&font,
 		"Solve",
 		BackColor);
-
+	SolveButton.AddHandler([&]() {
+		window.close();
+	});
 	//---HintButton
 	Button HintButton = Button(
 		GreenColor,
@@ -182,6 +184,12 @@ void Controller::run(){
 		&font,
 		"Hint",
 		BackColor);
+	HintButton.AddHandler([&]() {
+
+		//___ICI LOL PUTES PAS CHERES___
+		window.close();
+
+	});
 
 	//---Help Menu
 	Button HelpMenu = Button(
@@ -201,24 +209,28 @@ void Controller::run(){
 		sf::Vector2f(304, 222),
 		sf::Vector2f(100, 32),
 		&font,
-		"Aide (off)",
+		"Check (off)",
 		BackColor);
 	CHelpButton.setOutlineThickness(2);
 	CHelpButton.setOutlineColor(BackColor);
+	CHelpButton.Sizing();
+	CHelpButton.Centering();
 
 	CHelpButton.AddHandler([&]() {
 		if (ConsistencyHelp) {
 			ConsistencyHelp = false;
-			CHelpButton.Texte.setString("Aide (off)");
-			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+			CHelpButton.Texte.setString("Check (off)");
+			CHelpButton.Sizing();
+			CHelpButton.Centering();
 			if (ActiveCell[0] == 1) {
 				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2], true);
 			}
 		}
 		else {
 			ConsistencyHelp = true;
-			CHelpButton.Texte.setString("Aide (on)");
-			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+			CHelpButton.Texte.setString("Check (on)");
+			CHelpButton.Sizing();
+			CHelpButton.Centering();
 
 			if (ActiveCell[0] == 1) {
 			PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
@@ -237,17 +249,21 @@ void Controller::run(){
 		BackColor);
 	HelpValuesButton.setOutlineThickness(2);
 	HelpValuesButton.setOutlineColor(BackColor);
+	HelpValuesButton.Sizing();
+	HelpValuesButton.Centering();
+
 	HelpValuesButton.AddHandler([&]() {
 		if (ValuesHelp) {
 			ValuesHelp = false;
 			HelpValuesButton.Texte.setString("Values (off)");
-			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
+			HelpValuesButton.Sizing();
+			HelpValuesButton.Centering();
 			
 		}
 		else {
 			ValuesHelp = true;
 			HelpValuesButton.Texte.setString("Values (on)");
-			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
+			
 			if (ActiveCell[0] == 1) {
 				//PoliceDesCellules(&CurrentGrille);
 				
@@ -474,11 +490,19 @@ void Controller::run(){
 					}
 					//SolveButton
 					else if (SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-						window.close();
+						SolveButton.CallHandler();
 					}
-					//HelpButton
+					//HintButton
+					else if (HintButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						HintButton.CallHandler();
+					}
+					//ConsistencyButton
 					else if (CHelpButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						CHelpButton.CallHandler();
+					}
+					//HelpValuesButton
+					else if (HelpValuesButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						HelpValuesButton.CallHandler();
 					}
 					// ButtonVal
 					else {
@@ -659,11 +683,19 @@ void Controller::run(){
 		window.draw(HintButton.Texte);
 		window.draw(HelpMenu);
 		window.draw(HelpMenu.Texte);
-		window.draw(CHelpButton);
-		window.draw(CHelpButton.Texte);
-		window.draw(HelpValuesButton);
-		window.draw(HelpValuesButton.Texte);
 
+		if (ConsistencyHelp & !ValuesHelp) {
+			window.draw(HelpValuesButton);
+			window.draw(HelpValuesButton.Texte);
+			window.draw(CHelpButton);
+			window.draw(CHelpButton.Texte);
+		}
+		else {
+			window.draw(CHelpButton);
+			window.draw(CHelpButton.Texte);
+			window.draw(HelpValuesButton);
+			window.draw(HelpValuesButton.Texte);
+		}
 		
 
 		//Higlights

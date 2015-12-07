@@ -16,7 +16,8 @@ Button::Button(sf::Color colorFB, sf::Vector2f positionB, sf::Vector2f sizeB, sf
 	setPosition(positionB);
 	setSize(sizeB);
 	Texte = LinkedTexte(fontT, stringT, colorT);
-	
+	Centering();
+	Sizing();
 }
 
 sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {
@@ -25,35 +26,35 @@ sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {
 	texte.setString(str);
 	texte.setCharacterSize(getSize().y*0.7);
 	texte.setColor(color);
-	texte.setPosition(Button::Centering(texte));
+
 	return texte;
 }
 
-sf::Vector2f Button::Centering(sf::Text text) {
+void Button::Centering() {
 	float x = getPosition().x;
 	float y = getPosition().y;
-	float Sx = text.getCharacterSize()*text.getString().getSize() / 5;
-	float Sy = text.getCharacterSize() / 1.6;
+	float Sx = Texte.getCharacterSize()*Texte.getString().getSize() / 5;
+	float Sy = Texte.getCharacterSize() / 1.6;
 
 	x = x + getSize().x / 2 - Sx;
 	y = y + getSize().y / 2 - Sy;
-	return sf::Vector2f(x, y);
+	Texte.setPosition(x,y);
 
 }
 
-float Button::Sizing(sf::Text text) {
+void Button::Sizing() {
 	float x = getSize().x;
 	float y = getSize().y;
-	float Rx = 0.8; //coefficients de remplissage max vertical et horizontal
-	float Ry = 0.9;
-	float Sx = Ry * getSize().y / 0.4 * text.getString().getSize();
+	float Rx = 6.3; //coefficients de reglage
+	float Ry = 0.7;
+	float Sx = Rx * getSize().y / (Texte.getString().getSize());
 	float Sy = Ry * getSize().y;
 
 	if (Sx < Sy) {
-		return Sx;
+		Texte.setCharacterSize(Sx);
 	}
 	else {
-		return Sy;
+		Texte.setCharacterSize(Sy);
 	}
 
 }
