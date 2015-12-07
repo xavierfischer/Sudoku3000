@@ -36,22 +36,34 @@ void Controller::MaJHighlights(int i , int j) {
 	HighRegion.setPosition(sf::Vector2f(CellToPosition(3 * (i / 3), 0).x, CellToPosition(0, 3 * (j / 3)).y));
 }
 
-/*
 
-void Controller::PoliceDesCellules(Grille *grid)
 
+void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
 {
-	list<list<int>> Errors=grid.getUnconsistentCells(int i, int j) { ... } Errors = grid.getUnconsistentCells(ActiveCell[1], ActiveCell[2]);
-
-	for (std::list<int[2]>::iterator it = Errors.begin(); it != Errors.end(); it++) {
-		//Pour ==0 {
-
+	//(*buttonCell[1][0]).setOutlineColor(sf::Color::Red);
+	//if ((*buttonCell[0][0]).getOutlineColor() == sf::Color::White) {
+	//	std::cout << "Youhou !" << std::endl;
+	//}
+	for (int i = 0; i <= 8; ++i) {
+		//std::cout << "on entame une boucle" << std::endl;
+		for (int j = 0; j <= 8; ++j) {
+			(*buttonCell)[i][j].setOutlineColor(sf::Color::White);
+			(*buttonCell)[i][j].Texte.setColor(sf::Color::Black);
+		}
 	}
+	if (!clear) { //Si on est pas dans une fonction de 'clear', on met les cellules en rouge si besoin
+		list<list<int>> Errors = (*grid).getUnconsistentCells(I, J);
 
+		for (std::list<list<int>>::iterator it = Errors.begin(); it != Errors.end(); it++) {
+			//Si il y a entrée dans la boucle, il y a erreur donc on colore la cellule concernée
+			(*buttonCell)[I][J].setOutlineColor(sf::Color::Red);
+			(*buttonCell)[I][J].Texte.setColor(sf::Color::Red);
+			(*buttonCell)[(*it).front()][(*it).back()].Texte.setColor(sf::Color::Red);
+		}
 	}
-
+	
 }
-*/
+
 
 void Controller::run(){
 	sf::RenderWindow window(sf::VideoMode(419, 419), "SudokuSolver", sf::Style::Close);
@@ -67,7 +79,7 @@ void Controller::run(){
 	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
-	Grille CurrentGrille = Grille::createTemplateMissing();
+	Grille CurrentGrille = Grille::createTemplateWrong();
 	std::cout << (*CurrentGrille.getCell(1, 2)).getValue() << std::endl;
 	
 	//Elements de controles
@@ -116,6 +128,10 @@ void Controller::run(){
 				ButtonCell[i][j].setOutlineThickness(1);
 				MaJHighlights(i, j);
 				HighlightsGrid = true;
+
+				if (ConsistencyHelp) {
+				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
+				}
 			});
 		}
 	}
@@ -195,11 +211,18 @@ void Controller::run(){
 			ConsistencyHelp = false;
 			CHelpButton.Texte.setString("Aide (off)");
 			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+			if (ActiveCell[0] == 1) {
+				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2], true);
+			}
 		}
 		else {
 			ConsistencyHelp = true;
 			CHelpButton.Texte.setString("Aide (on)");
 			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
+
+			if (ActiveCell[0] == 1) {
+			PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
+			}
 		}
 		CHelpButton.EnfonceurButton();
 	});
@@ -262,15 +285,14 @@ void Controller::run(){
 		ButtonVal[i].AddHandler([&, i]() {
 			ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte.setColor(sf::Color::Black);
 			(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
-			std::cout << "Bite1" << std::endl;
+
 			if (ConsistencyHelp ) {
-				std::cout << "Bite2" << std::endl;
-				if(! (CurrentGrille.isCellConsistent(ActiveCell[1], ActiveCell[2])) ){
+				/*if(! (CurrentGrille.isCellConsistent(ActiveCell[1], ActiveCell[2])) ){
 					std::cout << "Bite3" << std::endl;
 					ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte.setColor(sf::Color::Red);
-				}
+				}*/
 				//Test de consistence
-				
+				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
 			}
 
 		});
