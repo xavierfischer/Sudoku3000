@@ -80,7 +80,7 @@ void Controller::run(){
 	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
-	Grille CurrentGrille = Grille::createTemplateWrong();
+	Grille CurrentGrille = Grille::createTemplateMissing();
 	Solver currentSolver(&CurrentGrille);
 	currentSolver.initiate();
 	
@@ -143,6 +143,10 @@ void Controller::run(){
 				//Mise à jour des currentPoss
 				for (int k = 0; k <= 8; ++k) {
 					currentPossibilities.setPossibility(k, (*(*CurrentGrille.getCell(i, j)).getPossibilities()).getPossibility(k));
+				}
+				if (CurrentGrille.isCellConsistent(i, j)) {
+					std::cout << "zgueugue" << std::endl;
+					currentPossibilities.setPossibility((*CurrentGrille.getCell(i, j)).getValue()-1, true);
 				}
 				
 
@@ -321,6 +325,7 @@ void Controller::run(){
 				currentSolver.update(ActiveCell[1], ActiveCell[2], i);
 				if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
 					Victory = true;
+					window.close();
 				}
 			}
 			
@@ -527,8 +532,6 @@ void Controller::run(){
 					// ButtonVal
 					else {
 						for (int i = 0; i <= 9; ++i) {
-							std::cout << currentPossibilities.getPossibility(i) << std::endl;
-							
 							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) &
 								ActiveCell[0]==1
 								) {
