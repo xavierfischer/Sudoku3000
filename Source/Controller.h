@@ -24,4 +24,6 @@ public:
 	bool HighlightsTheme = true;
 	bool ConsistencyHelp = false;
 	bool ValuesHelp = false;
+	bool Victory = false;
+	Possibilities currentPossibilities;
 };

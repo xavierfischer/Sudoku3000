@@ -19,6 +19,7 @@ public:
 		sf::Font *fontT,
 		std::string stringT,
 		sf::Color colorT);
+	sf::Color colorF;
 	sf::Color colorT;
 	void EnfonceurButton();
 	sf::Text Texte;
