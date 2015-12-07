@@ -14,7 +14,7 @@ Cellule::Cellule() {
 }
 Cellule::Cellule(int n){
 	value = n;
-	isFixed = true;
+	isFixed = n!=0;
 	for (int i = 0; i < 10; i++) {
 		possibilities.setPossibility(i, false);
 	}
