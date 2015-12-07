@@ -31,7 +31,7 @@ Cellule  *NineUplet::getCell(int i)  const {
 	return cells[i];
 }
 
-bool  NineUplet::isPresent(int n) const
+bool  NineUplet::isPresent(int n) const // realValue
 {
 	for (int i = 0; i < 9; i++) {
 		if ((*(cells[i])).getValue() == n) {

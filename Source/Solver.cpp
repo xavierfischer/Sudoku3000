@@ -69,8 +69,68 @@ void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet co
 	}
 }
 
+/*
+	Retourne -1 si la valeur ne peut pas être décidée ou est déjà présente dans le nuple
+	Retour l'indice local de la cellule qui peut être décidée avec cette valeur
+*/
+
+int Solver::hintHumanInNuple(NineUplet nuple, int value) {
+	int localCoord = -1;
+	if (!nuple.isFull() && !nuple.isPresent(value)) {
+		int a = 0;
+		for (int j = 0; j < 9; j++) { // pour chaque cellule de la région
+			if (a != -1) { // Deux possibilités déjà trouvées
+				if (((*(*nuple.getCell(j)).getPossibilities())).getPossibility(value - 1)) {
+					a = a == 0 ? j : -1;
+				}
+			}
+		}
+		if (a != -1 && a != 0) { // Si on a bien une et une seule valeur
+			localCoord = a;
+		}
+	}
+	return localCoord;
+}
+
 int *Solver::hintHuman() {
-	
+	int coords[3] = { 0,0,0 };
+
+	for (int i = 1; i < 10; i++) { // pour chaque valeur
+		coords[2] = i;
+
+		for (int x = 0; x < 9; x++) { // pour chaque ligne
+			NineUplet line = (*grid).getLine(i);
+			int localCoord = hintHumanInNuple(line, i);
+			if (localCoord != -1) {
+				coords[0] = x;
+				coords[1] = localCoord;
+				return coords;
+			}
+		}
+
+		for (int x = 0; x < 9; x++) { // pour chaque ligne
+			NineUplet column = (*grid).getColumn(i);
+			int localCoord = hintHumanInNuple(column, i);
+			if (localCoord != -1) {
+				coords[0] = localCoord;
+				coords[1] = x;
+				return coords;
+			}
+		}
+
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				NineUplet region = (*grid).getRegion(x, y);
+				int localCoord = hintHumanInNuple(region, i);
+				if (localCoord != -1) {
+					coords[0] = x * 3 + (localCoord % 3);
+					coords[1] = y * 3 + (localCoord - localCoord % 3) / 3;
+					return coords;
+				}
+			}
+		}
+		return coords;
+	}
 }
 
 int *Solver::hint() {

@@ -18,6 +18,7 @@ public:
 	bool isHintable();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
+	int Solver::hintHumanInNuple(NineUplet nuple, int value);
 
 private:
 	Grille *grid;

@@ -7,7 +7,7 @@ Possibilities::Possibilities() {
 	attachedJ = -1;
 }
 
-bool Possibilities::getPossibility(int i) {
+bool Possibilities::getPossibility(int i) { // not real value
 	return possibilities[i];
 }
 
