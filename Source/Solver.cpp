@@ -30,6 +30,7 @@ static bool comparePossibilities(Possibilities &a, Possibilities &b)
 }
 
 void Solver::initiate() {
+	leftPossibilities.clear();
 	for (int i = 0; i < 9; i++) {
 		NineUplet line = (*grid).getLine(i);
 		for (int j = 0; j < 9; j++) {
@@ -50,7 +51,6 @@ void Solver::initiate() {
 	}
 	initiated = true;
 	leftPossibilities.sort(comparePossibilities);
-
 }
 
 /*
@@ -180,6 +180,7 @@ void Solver::update(int i, int j, int value) {
 				(*(*region.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
 				(*(*column.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
 		}
+		leftPossibilities.sort(comparePossibilities);
 	}
 }
 
