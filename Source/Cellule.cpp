@@ -10,11 +10,14 @@
 // Constructeur par défaut
 Cellule::Cellule() {
 	value = 0;
-	isGuess = false;
+	fixed = false;
 }
 Cellule::Cellule(int n){
 	value = n;
-	isGuess = false;
+	fixed = true;
+	for (int i = 0; i < 10; i++) {
+		possibilities.setPossibility(i, false);
+	}
 }
 
 bool Cellule::isEmpty() {
@@ -33,5 +36,9 @@ int Cellule::getValue()
 
 void Cellule::setValue(int n) {
 	value = n;
+}
+
+Possibilities *Cellule::getPossibilities() {
+	return &possibilities;
 }
 

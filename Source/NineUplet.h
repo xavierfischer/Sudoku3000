@@ -9,11 +9,11 @@
 class NineUplet {
 public:
 	NineUplet(Cellule *a[9]);
-	bool isConsistent();
-	Cellule **getCells();
-	bool isPresent(int n);
-	bool isFull();
-	Cellule *getCell(int);
+	bool isConsistent() const;
+	Cellule **getCells(); 
+	bool isPresent(int n) const;
+	bool isFull() const;
+	Cellule *getCell(int) const;
 private:
 	Cellule *cells[9];
 };

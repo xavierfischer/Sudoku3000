@@ -10,7 +10,7 @@ NineUplet::NineUplet(Cellule *a[9]){
 	}
 }
 
-bool NineUplet::isConsistent() {
+bool  NineUplet::isConsistent() const {
 	int count = 0;
 	for (int i = 1; i < 10; i++) {
 		count = 0;
@@ -23,15 +23,15 @@ bool NineUplet::isConsistent() {
 	return true;
 }
 
-Cellule **NineUplet::getCells() {
+Cellule  **NineUplet::getCells(){
 	return cells;
 }
 
-Cellule *NineUplet::getCell(int i) {
+Cellule  *NineUplet::getCell(int i)  const {
 	return cells[i];
 }
 
-bool NineUplet::isPresent(int n)
+bool  NineUplet::isPresent(int n) const
 {
 	for (int i = 0; i < 9; i++) {
 		if ((*(cells[i])).getValue() == n) {
@@ -41,7 +41,7 @@ bool NineUplet::isPresent(int n)
 	return false;
 }
 
-bool NineUplet::isFull() {
+bool NineUplet::isFull() const {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
 		result = result && (*cells[i]).getValue() != 0;

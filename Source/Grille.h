@@ -28,6 +28,7 @@ public:
 	static Grille createTemplateWrong();
 
 	list<list<int>> getUnconsistentCells(int, int);
+	bool isCellConsistent(int i, int j);
 
 private: 
 	Cellule cells[9][9];
