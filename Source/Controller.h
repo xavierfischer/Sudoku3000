@@ -10,7 +10,6 @@
 #include "Grille.h"
 
 class Controller 
-
 {
 public:
 	int ActiveCell[3];
