@@ -25,6 +25,7 @@ public:
 
 	static Grille createTemplate();
 	static Grille createTemplateMissing();
+	static Grille createTemplateMissing2();
 	static Grille createTemplateWrong();
 
 	list<list<int>> getUnconsistentCells(int, int);
