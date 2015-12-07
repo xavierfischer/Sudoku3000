@@ -25,4 +25,5 @@ public:
 	bool ConsistencyHelp = false;
 	bool ValuesHelp = false;
 	bool Victory = false;
+	Possibilities currentPossibilities;
 };

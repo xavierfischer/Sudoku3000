@@ -10,13 +10,19 @@
 #include <SFML/Graphics/Color.hpp>
 #include "Cellule.h"
 #include "Grille.h"
-
+#include "Solver.h"
 
 
 Controller::Controller()
 {
 	
 	
+}
+
+void MiseAJourCurrentPossibilities(int i, int j) {
+
+
+
 }
 
 sf::Vector2i Controller::CellToPosition(int i, int j)
@@ -37,7 +43,6 @@ void Controller::MaJHighlights(int i , int j) {
 }
 
 
-
 void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
 {
 	
@@ -50,7 +55,6 @@ void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bo
 	}
 	if (!clear) { //Si on est pas dans une fonction de 'clear', on met les cellules en rouge si besoin
 		list<list<int>> Errors = (*grid).getUnconsistentCells(I, J);
-		std::cout << "Bijour" << std::endl;
 		for (std::list<list<int>>::iterator it = Errors.begin(); it != Errors.end(); it++) {
 			//Si il y a entrée dans la boucle, il y a erreur donc on colore la cellule concernée
 			(*buttonCell)[I][J].setOutlineColor(sf::Color::Red);
@@ -77,7 +81,8 @@ void Controller::run(){
 
 	sf::Vector2i Position; //Position de la souris
 	Grille CurrentGrille = Grille::createTemplateWrong();
-	std::cout << (*CurrentGrille.getCell(1, 2)).getValue() << std::endl;
+	Solver currentSolver(&CurrentGrille);
+	currentSolver.initiate();
 	
 	//Elements de controles
 	ActiveCell[0] = 0;
@@ -118,7 +123,6 @@ void Controller::run(){
 					sf::Color::Blue
 					);
 			}
-			std::cout << std::to_string((*CurrentGrille.getCell(i, j)).isFixed) << std::endl;
 			
 			ButtonCell[i][j].setOutlineColor(sf::Color::White);
 			//Fonction du bouton
@@ -134,8 +138,14 @@ void Controller::run(){
 				HighlightsGrid = true;
 
 				if (ConsistencyHelp) {
-				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
+					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
 				}
+				//Mise à jour des currentPoss
+				for (int k = 0; k <= 8; ++k) {
+					currentPossibilities.setPossibility(k, (*(*CurrentGrille.getCell(i, j)).getPossibilities()).getPossibility(k));
+				}
+				
+
 			});
 		}
 	}
@@ -269,10 +279,12 @@ void Controller::run(){
 		else {
 			ValuesHelp = true;
 			HelpValuesButton.Texte.setString("Values (on)");
-			
+			}
 			if (ActiveCell[0] == 1) {
-				//PoliceDesCellules(&CurrentGrille);
-				
+				//MiseAJourCurrentPossibilities
+				for (int k = 0; k <= 8; ++k) {
+				currentPossibilities.setPossibility(k,
+					(*(*CurrentGrille.getCell(ActiveCell[1],ActiveCell[2])).getPossibilities()).getPossibility(k));
 			}
 		}
 		HelpValuesButton.EnfonceurButton();
@@ -306,6 +318,7 @@ void Controller::run(){
 		ButtonVal[i].AddHandler([&, i]() {
 			if ((*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).isFixed==false) {
 				(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
+				currentSolver.update(ActiveCell[1], ActiveCell[2], i);
 				if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
 					Victory = true;
 				}
@@ -514,8 +527,18 @@ void Controller::run(){
 					// ButtonVal
 					else {
 						for (int i = 0; i <= 9; ++i) {
-							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) & ActiveCell[0]==1) {
-								ButtonVal[i].CallHandler();
+							std::cout << currentPossibilities.getPossibility(i) << std::endl;
+							
+							if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) &
+								ActiveCell[0]==1
+								) {
+								if (ValuesHelp & (i > 0) & !(currentPossibilities.getPossibility(i-1))) {
+									//La valeur n'est pas prise en compte
+								}
+								else {
+									ButtonVal[i].CallHandler();
+								}
+
 							}
 						}
 
@@ -679,9 +702,14 @@ void Controller::run(){
 			window.draw(CancelButton.Texte);
 			for (int i = 0; i <= 9; ++i) {
 				window.draw(ButtonVal[i]);
+				if (i > 0 & ValuesHelp & !(currentPossibilities.getPossibility(i - 1))) {
+				}
+				else {
 				window.draw(ButtonVal[i].Texte);
+				}
 			}
 		}
+
 
 		//--Bouton Solve
 		window.draw(SolveButton);
