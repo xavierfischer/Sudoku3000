@@ -12,7 +12,7 @@ public:
     void initiate();
 	void update(int, int, int);
 
-	void hint();
+	int *hint();
 	bool isHintable();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);

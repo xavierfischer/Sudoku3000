@@ -65,16 +65,22 @@ void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet co
 	}
 }
 
-void Solver::hint() {
+int *Solver::hint() {
+	int coords[3] = { 0, 0, 0 };
 	if (leftPossibilities.size() > 0) {
 		Possibilities p = leftPossibilities.front();
-		int value = p.resolve();
+		int i = p.attachedI;
+		int j = p.attachedJ;
+		Possibilities realP = getPossibilities(i, j);
+		int value = realP.resolve(); // realValue
 		if (value != 0) {
-			Cellule *cell = (*grid).getCell(p.attachedI, p.attachedJ);
-			(*cell).setValue(value);
+			Cellule *cell = (*grid).getCell(i,j);
+			(*cell).setValue(value); // realValue
 			leftPossibilities.pop_front();
 			hintable = true;
-			update(p.attachedI, p.attachedJ, value);
+			coords[0] = i;
+			coords[1] = j;
+			coords[2] = value; // realValue
 		}
 		else {
 			hintable = false;
@@ -83,6 +89,7 @@ void Solver::hint() {
 	else {
 		hintable = false;
 	}
+	return coords;
 }
 
 /*
