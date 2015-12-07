@@ -29,6 +29,7 @@ Grille::Grille(int * a[9])
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
 			cells[i][j].setValue(a[i][j]);
+			cells[i][j].isFixed = a[i][j] != 0;
 		}
 	}
 }
