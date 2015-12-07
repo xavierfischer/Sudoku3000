@@ -8,6 +8,7 @@
 class Solver {
 
 public:
+	Solver();
     Solver(Grille *grille);
     void initiate();
 	void update(int, int, int);

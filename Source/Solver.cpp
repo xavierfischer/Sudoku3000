@@ -1,8 +1,12 @@
 #include "Solver.h"
 
+
+
 /*
 	Cette classe permet de solver en backtrack une grille
 */
+
+Solver::Solver(){}
 
 Solver::Solver(Grille *g) :grid(g) {}
 
