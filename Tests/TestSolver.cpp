@@ -115,19 +115,18 @@ namespace Tests
 
 		TEST_METHOD(Complete_Missing_grid) {
 
-			Grille grille = Grille::createTemplateMissing();
+			Grille grille = Grille::createTemplateMissing2();
 			Solver solver(&grille);
 
 			Assert::IsFalse(grille.isFull());
 			Assert::IsTrue(grille.isConsistent());
 
 			solver.initiate();
-			//while (solver.hint()) {};
 
-			for (int i = 0; i < 9; i++) {
+			while (solver.isHintable()) {
 				solver.hint();
 			}
-
+			
 			Assert::IsTrue(grille.isFull());
 			Assert::IsTrue(grille.isConsistent());
 
