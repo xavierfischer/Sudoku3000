@@ -80,7 +80,7 @@ void Controller::run(){
 	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
-	Grille CurrentGrille = Grille::createTemplateMissing();
+	Grille CurrentGrille = Grille::createTemplateEparse();
 	Solver currentSolver(&CurrentGrille);
 	currentSolver.initiate();
 	
