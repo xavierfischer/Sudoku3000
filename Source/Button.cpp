@@ -32,7 +32,7 @@ sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {
 sf::Vector2f Button::Centering(sf::Text text) {
 	float x = getPosition().x;
 	float y = getPosition().y;
-	float Sx = text.getCharacterSize()*text.getString().getSize() / 5;
+	float Sx = text.getCharacterSize()*text.getString().getSize() / 4.8;
 	float Sy = text.getCharacterSize() / 1.6;
 
 	x = x + getSize().x / 2 - Sx;
@@ -45,8 +45,8 @@ float Button::Sizing(sf::Text text) {
 	float x = getSize().x;
 	float y = getSize().y;
 	float Rx = 0.8; //coefficients de remplissage max vertical et horizontal
-	float Ry = 0.9;
-	float Sx = Ry * getSize().y / 0.4 * text.getString().getSize();
+	float Ry = 0.6;
+	float Sx = Ry * getSize().y / 0.7 * text.getString().getSize();
 	float Sy = Ry * getSize().y;
 
 	if (Sx < Sy) {

@@ -185,20 +185,24 @@ void Controller::run(){
 		sf::Vector2f(304, 222),
 		sf::Vector2f(100, 32),
 		&font,
-		"Aide (off)",
+		"Check (off)",
 		BackColor);
 	CHelpButton.setOutlineThickness(2);
 	CHelpButton.setOutlineColor(BackColor);
+	CHelpButton.Texte.setCharacterSize(CHelpButton.Sizing(CHelpButton.Texte));
+	CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
 
 	CHelpButton.AddHandler([&]() {
 		if (ConsistencyHelp) {
 			ConsistencyHelp = false;
-			CHelpButton.Texte.setString("Aide (off)");
+			CHelpButton.Texte.setString("Check (off)");
+			CHelpButton.Texte.setCharacterSize(CHelpButton.Sizing(CHelpButton.Texte));
 			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
 		}
 		else {
 			ConsistencyHelp = true;
-			CHelpButton.Texte.setString("Aide (on)");
+			CHelpButton.Texte.setString("Check (on)");
+			CHelpButton.Texte.setCharacterSize(CHelpButton.Sizing(CHelpButton.Texte));
 			CHelpButton.Texte.setPosition(CHelpButton.Centering(CHelpButton.Texte));
 		}
 		CHelpButton.EnfonceurButton();
@@ -214,16 +218,20 @@ void Controller::run(){
 		BackColor);
 	HelpValuesButton.setOutlineThickness(2);
 	HelpValuesButton.setOutlineColor(BackColor);
+	HelpValuesButton.Texte.setCharacterSize(HelpValuesButton.Sizing(HelpValuesButton.Texte));
+	HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
+
 	HelpValuesButton.AddHandler([&]() {
 		if (ValuesHelp) {
 			ValuesHelp = false;
 			HelpValuesButton.Texte.setString("Values (off)");
+			HelpValuesButton.Texte.setCharacterSize(HelpValuesButton.Sizing(HelpValuesButton.Texte));
 			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
-			
 		}
 		else {
 			ValuesHelp = true;
 			HelpValuesButton.Texte.setString("Values (on)");
+			HelpValuesButton.Texte.setCharacterSize(HelpValuesButton.Sizing(HelpValuesButton.Texte));
 			HelpValuesButton.Texte.setPosition(HelpValuesButton.Centering(HelpValuesButton.Texte));
 			if (ActiveCell[0] == 1) {
 				//PoliceDesCellules(&CurrentGrille);
@@ -445,18 +453,22 @@ void Controller::run(){
 						}
 					}
 					//Verification pour le Cancel
-					else if (ActiveCell[0] == 1 & CancelButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-						//ActiveCell[0] = 0;
-						//ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+					else if (CancelButton.getGlobalBounds().contains((float)Position.x, (float)Position.y) & ActiveCell[0] == 1) {
+						//std::cout << "bit" << std::endl;
 						CancelButton.CallHandler();
+
 					}
 					//SolveButton
 					else if (SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						window.close();
 					}
-					//HelpButton
+					//ConsistencyHelp
 					else if (CHelpButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 						CHelpButton.CallHandler();
+					}
+					//HelpValuesButton
+					else if (HelpValuesButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						HelpValuesButton.CallHandler();
 					}
 					// ButtonVal
 					else {
@@ -637,10 +649,21 @@ void Controller::run(){
 		window.draw(HintButton.Texte);
 		window.draw(HelpMenu);
 		window.draw(HelpMenu.Texte);
-		window.draw(CHelpButton);
-		window.draw(CHelpButton.Texte);
-		window.draw(HelpValuesButton);
-		window.draw(HelpValuesButton.Texte);
+
+		//Gestion des contours de boutons
+		if (ConsistencyHelp & !(ValuesHelp)) {
+			window.draw(HelpValuesButton);
+			window.draw(HelpValuesButton.Texte);
+			window.draw(CHelpButton);
+			window.draw(CHelpButton.Texte);
+		}
+		else {
+			window.draw(CHelpButton);
+			window.draw(CHelpButton.Texte);
+			window.draw(HelpValuesButton);
+			window.draw(HelpValuesButton.Texte);
+		}
+		
 
 		
 
