@@ -207,14 +207,16 @@ Grille Grille::createTemplateWrong() {
 list<list<int>> Grille::getUnconsistentCells(int i, int j) {
 	list<list<int>> result;
 	Cellule cell = *getCell(i, j);
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
-			Cellule lookedCell = *getCell(x,y);
-			if (x != i || y != j) {
-				if (lookedCell.getValue() == cell.getValue()) {
-					if (x == i || y==j || areInSameRegion(i,j,x,y)) {
-						list<int> c = { x,y };
-						result.push_front(c);
+	if (cell.getValue() != 0) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				Cellule lookedCell = *getCell(x, y);
+				if (x != i || y != j) {
+					if (lookedCell.getValue() == cell.getValue()) {
+						if (x == i || y == j || areInSameRegion(i, j, x, y)) {
+							list<int> c = { x,y };
+							result.push_front(c);
+						}
 					}
 				}
 			}
@@ -235,4 +237,9 @@ bool Grille::areInSameRegion(int i, int j, int x, int y) {
 		int regionY = (y - (y % 3)) / 3;
 		return regionI == regionX && regionJ == regionY;
 	}
+}
+
+bool Grille::isCellConsistent(int i, int j) {
+	list<list<int>> v = getUnconsistentCells(i, j);
+	return (int)v.size() == 0;
 }

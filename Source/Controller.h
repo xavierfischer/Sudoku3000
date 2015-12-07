@@ -20,6 +20,6 @@ public:
 	Controller();
 	sf::Vector2i CellToPosition(int x, int y);
 	void run();
-	void Controller::PoliceDesCellules(Grille *grid);
+	//void Controller::PoliceDesCellules(Grille *grid);
 	void MaJHighlights(int i, int j);
 };
