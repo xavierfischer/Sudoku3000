@@ -7,12 +7,12 @@ Possibilities::Possibilities() {
 	attachedJ = -1;
 }
 
-bool Possibilities::getPossibility(int i) { // not real value
-	return possibilities[i];
+bool Possibilities::getPossibility(int indexOfValue) { // not real value
+	return possibilities[indexOfValue];
 }
 
-void Possibilities::setPossibility(int i, bool value) {
-	possibilities[i] = value;
+void Possibilities::setPossibility(int i, bool indexOfValue) {
+	possibilities[i] = indexOfValue;
 }
 
 int Possibilities::possibles() {

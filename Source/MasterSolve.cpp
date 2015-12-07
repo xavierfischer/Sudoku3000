@@ -9,6 +9,14 @@ bool MasterSolve::hint() {
 	return false;
 }
 
+bool MasterSolve::hintHuman() {
+	int *result = solver.hintHuman();
+	int i = result[0];
+	int j = result[1];
+	int value = result[2];
+	return value == 0;
+}
+
 bool MasterSolve::solve() {
 
 	solver.initiate();

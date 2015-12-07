@@ -11,6 +11,7 @@ class MasterSolve {
 public:
 	MasterSolve(Grille *grille);
 	bool hint();
+	bool hintHuman();
 	bool solve();
 
 private:
