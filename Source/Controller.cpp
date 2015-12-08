@@ -437,6 +437,7 @@ void Controller::run(){
 		BackColor);
 	TemplateButton.AddHandler([&]() {
 		CurrentGrille = Grille::createTemplateDiabolique();
+		FixerButton.CallHandler();
 	});
 
 
