@@ -51,7 +51,7 @@ namespace Tests
 			}
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 2; j++) {
-					NineUplet region = grille.getRegion(i, j);
+					NineUplet region = grille.getRegionA(i, j);
 					Assert::IsTrue(region.isConsistent());
 				}
 			}
@@ -63,6 +63,26 @@ namespace Tests
 			Assert::IsFalse(regionD.isFull());
 			Assert::IsFalse(regionB.isFull());
 			Assert::IsTrue(regionC.isFull());
+		}
+
+		TEST_METHOD(Region_Indexes)
+		{
+			Grille grille = Grille::createTemplate();
+			NineUplet region00 = grille.getRegionA(0, 0);
+			for (int i = 0; i < 9; i++) {
+				Assert::AreEqual((*region00.getCell(i)).getValue(), i+1);
+			}
+
+			NineUplet region21 = grille.getRegionA(1,2); // troisième ligne, deuxieme colonne
+			Assert::AreEqual((*region21.getCell(0)).getValue(), 8);
+			Assert::AreEqual((*region21.getCell(1)).getValue(), 9);
+			Assert::AreEqual((*region21.getCell(2)).getValue(), 1);
+			Assert::AreEqual((*region21.getCell(3)).getValue(), 2);
+			Assert::AreEqual((*region21.getCell(4)).getValue(), 3);
+			Assert::AreEqual((*region21.getCell(5)).getValue(), 4);
+			Assert::AreEqual((*region21.getCell(6)).getValue(), 5);
+			Assert::AreEqual((*region21.getCell(7)).getValue(), 6);
+			Assert::AreEqual((*region21.getCell(8)).getValue(), 7);
 		}
 
 		TEST_METHOD(Is_Value_Present)
@@ -87,7 +107,7 @@ namespace Tests
 				}
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 2; j++) {
-					NineUplet region = grille.getRegion(i, j);
+					NineUplet region = grille.getRegionA(i, j);
 					Assert::IsTrue(region.isPresent(k));
 				}
 			}

@@ -49,5 +49,14 @@ namespace Tests
 			Assert::AreEqual(0, grille.emptyValues());
 			Assert::IsTrue(result);
 		}
+
+		TEST_METHOD(Master_Solve_Grille_diabolique)
+		{
+			Grille grille = Grille::createTemplateDiabolique();
+			MasterSolve masterSolve(&grille);
+			bool result = masterSolve.solve();
+			Assert::AreEqual(0, grille.emptyValues());
+			Assert::IsTrue(result);
+		}
 	};
 }

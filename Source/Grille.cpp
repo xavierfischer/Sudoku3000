@@ -43,7 +43,7 @@ NineUplet Grille::getRegionFromCell(int i, int j)
 	if (i < 9 && i >= 0 && j < 9 && j >= 0) {
 		int regionI = (i - (i % 3)) / 3;
 		int regionJ = (j - (j % 3)) / 3;
-		return getRegion(regionI, regionJ);
+		return getRegionA(regionI, regionJ);
 	}
 	else {
 		throw std::out_of_range("Cell value must be between 0 and 9");
@@ -54,7 +54,7 @@ NineUplet Grille::getRegionFromCell(int i, int j)
 	Retourne une NineUplet représentant la région de coordonnées (i,j) (i, j = 0, 1 ou 2)
 */
 
-NineUplet Grille::getRegion(int regionI, int regionJ)
+NineUplet Grille::getRegionA(int regionI, int regionJ)
 {
 	if (regionI < 3 && regionI >= 0 && regionJ < 3 && regionJ >= 0) {
 		Cellule *myArray[9];
@@ -127,7 +127,7 @@ bool Grille::isConsistent() {
 
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 3; i++) {
-			result = result && getRegion(i, j).isConsistent();
+			result = result && getRegionA(i, j).isConsistent();
 		}
 		if (!result)
 			return result;
@@ -219,6 +219,21 @@ Grille Grille::createTemplateDifficile() {
 	int l7[9] = { 0,0,0,0,0,0,8,0,1 };
 	int l8[9] = { 1,0,0,0,0,0,0,6,0 };
 	int l9[9] = { 0,0,0,0,5,6,2,0,7 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplateDiabolique() {
+	int l1[9] = { 6,5,0,0,0,0,0,9,7};
+	int l2[9] = { 0,0,0,0,6,0,8,0,0 };
+	int l3[9] = { 3,0,0,4,0,9,0,0,0 };
+	int l4[9] = { 0,0,0,0,7,0,2,0,3 };
+	int l5[9] = { 0,2,0,0,8,0,0,4,0 };
+	int l6[9] = { 7,0,3,0,4,0,0,0,0 };
+	int l7[9] = { 0,0,0,1,0,4,0,0,5 };
+	int l8[9] = { 0,0,5,0,9,0,0,0,0 };
+	int l9[9] = { 1,8,0,0,0,0,0,6,2 };
 	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
 	Grille grille(data);
 	return grille;

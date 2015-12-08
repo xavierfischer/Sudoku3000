@@ -155,7 +155,7 @@ void Controller::run(){
 					//On redefinit les possibilités de valeurs dans (i,j), car elles ont pu changer
 					currentPossibilities.setPossibility(k, (*(*CurrentGrille.getCell(i, j)).getPossibilities()).getPossibility(k));
 				}
-				if (CurrentGrille.isCellConsistent(i, j)) {
+				if (CurrentGrille.isCellConsistent(i, j) && !(*CurrentGrille.getCell(i,j)).isEmpty()) {
 					//Si la cellule n'est pas en conflit, la valeur actuelle est aussi possible. l'Algo "getPossibilities l'exclus.
 					currentPossibilities.setPossibility((*CurrentGrille.getCell(i, j)).getValue()-1, true);
 				}
@@ -221,7 +221,7 @@ void Controller::run(){
 			for (int j = 0; j <= 8; ++j) {
 				if (!(*CurrentGrille.getCell(i, j)).isFixed) {//Toutes les cellules non fixées (donc devinées par l'utilisateur) sont...
 					(*CurrentGrille.getCell(i, j)).setValue(0); //Remise à 0
-					currentSolver.update(i, j, 0); //On update les solutions
+					currentSolver.initiate();
 					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]); 
 				}
 			}
@@ -257,7 +257,8 @@ void Controller::run(){
 		"Solve",
 		BackColor);
 	SolveButton.AddHandler([&]() {
-		window.close();
+		MasterSolve master(&CurrentGrille);
+		master.solve();
 	});
 	//---HintButton
 	Button HintButton = Button(
@@ -268,8 +269,8 @@ void Controller::run(){
 		"Hint",
 		BackColor);
 	HintButton.AddHandler([&]() {
-		window.close();
-
+		MasterSolve master(&CurrentGrille);
+		master.solveUnit();
 	});
 	
 
@@ -396,7 +397,7 @@ void Controller::run(){
 							CHelpButton.Centering();
 						}
 					}
-					currentSolver.update(i, j, (*CurrentGrille.getCell(i, j)).getValue());
+					currentSolver.initiate();
 				}
 			}
 		}
@@ -414,7 +415,7 @@ void Controller::run(){
 		"Model",
 		BackColor);
 	TemplateButton.AddHandler([&]() {
-		CurrentGrille = Grille::createTemplateMissing();
+		CurrentGrille = Grille::createTemplateDiabolique();
 	});
 
 
@@ -446,7 +447,7 @@ void Controller::run(){
 			if (ActiveCell[0] == 1) {
 				if ((*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).isFixed == false) {
 					(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
-					currentSolver.update(ActiveCell[1], ActiveCell[2], i);
+					currentSolver.initiate();
 					if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
 						Victory = true;
 					}

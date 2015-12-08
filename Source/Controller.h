@@ -8,6 +8,7 @@
 #include "Button.h"
 #include "Controller.h"
 #include "Grille.h"
+#include "MasterSolve.h"
 
 //La classe Controller contient certains attributs necessaires à la communication à travers l'interface, 
 //elle contient la méthode qui lanc la fenetre du jeu, run().

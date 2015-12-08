@@ -13,7 +13,7 @@ public:
 	Grille(int *a[9]);
 
 	NineUplet getRegionFromCell(int, int);
-	NineUplet getRegion(int, int);
+	NineUplet getRegionA(int, int);
 	NineUplet getLine(int);
 	NineUplet getColumn(int);
 
@@ -30,6 +30,7 @@ public:
 	static Grille createTemplateEparse();
 	static Grille createTemplateHumanTest();
 	static Grille createTemplateDifficile();
+	static Grille createTemplateDiabolique();
 
 	list<list<int>> getUnconsistentCells(int, int);
 	bool isCellConsistent(int i, int j);

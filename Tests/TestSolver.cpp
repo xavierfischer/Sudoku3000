@@ -57,7 +57,7 @@ namespace Tests
 
 			Grille grille = Grille::createTemplateMissing();
 			Possibilities *poss = (*grille.getCell(0, 0)).getPossibilities();
-			Solver::calcPoss(grille.getRegion(0, 0), grille.getLine(0), grille.getColumn(0), *poss);
+			Solver::calcPoss(grille.getRegionA(0, 0), grille.getLine(0), grille.getColumn(0), *poss);
 			
 			for (int i = 0; i < 9; i++) {
 				if (i != 1) { // value != 2

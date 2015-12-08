@@ -136,11 +136,12 @@ int *Solver::hintHuman() {
 
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
-				NineUplet region = (*grid).getRegion(x, y);
+				NineUplet region = (*grid).getRegionA(y,x);
 				int localCoord = hintHumanInNuple(region, i);
 				if (localCoord != -1) {
-					coords[0] = x * 3 + (localCoord % 3);
-					coords[1] = y * 3 + (localCoord - localCoord % 3) / 3;
+					//Formules foireuses
+					coords[1] = x * 3 + (localCoord % 3);
+					coords[0] = y * 3 + (localCoord - localCoord % 3) / 3;
 					hintableHuman = true;
 					return coords;
 				}
@@ -189,10 +190,6 @@ int *Solver::hintComputer() {
 			}
 		}
 
-		if(!(*(*grid).getCell(i, j)).isEmpty()){ // s'il y a déjà une valeur, passer son tour
-			leftPossibilities.pop_front();
-			return hintComputer();
-		}
 		Possibilities realP = getPossibilities(i, j);
 		int value = realP.resolve(); // realValue
 		if (value != 0) {
@@ -205,6 +202,24 @@ int *Solver::hintComputer() {
 			coords[2] = value; // realValue
 		}
 		else {
+			if (realP.possibles() == 2) {
+
+				//Backtrack : 
+
+				int value1 = 0;
+				int value2 = 0;
+				for (int i = 0; i < 9; i++) {
+					value1 = (value1 == 0 && realP.getPossibility(i)) ? (i+1) : value1;
+					value2 = (value1 != 0 && realP.getPossibility(i)) ? (i + 1) : value2;
+				}
+				
+
+
+
+
+
+
+			} else {
 			hintableComputer = false;
 		}
 	}

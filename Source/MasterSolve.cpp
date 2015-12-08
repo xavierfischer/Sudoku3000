@@ -33,17 +33,21 @@ bool MasterSolve::hintComputerUnit() {
 
 bool MasterSolve::solveUnit() {
 	if ((*grid).isConsistent()) {
+
 		if (!solver.initiated) {
 			solver.initiate();
 		}
 
 		if (hintHumanUnit()) {
 			solver.initiate();
+			cout << "Human" << endl;
 			return true;
 		}
 		else {
+			cout << " Try Computer" << endl;
 			if (hintComputerUnit()) {
 				solver.initiate();
+				cout << "Computer" << endl;
 				return true;
 			}
 			else {
