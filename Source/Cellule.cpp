@@ -30,7 +30,12 @@ int Cellule::getValue()
 }
 
 void Cellule::setValue(int n) {
-	value = n;
+	if (n >= 0 && n <= 9) {
+		value = n;
+	}
+	else {
+		//throw out_of_range("OUT OF RANGE");
+	}
 }
 
 Possibilities *Cellule::getPossibilities() {
