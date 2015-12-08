@@ -28,7 +28,7 @@ bool LastCellFinder::fill() {
 	int count2 = 0;
 	int pos = 0;
 
-
+	/*
 	//On compte le nombre de cellule vide
 	for (int i = 0; i <= 8; i++) {
 		if (tableCells[i].isEmpty()) {
@@ -55,4 +55,5 @@ bool LastCellFinder::fill() {
 		return true;
 	}
 	return false;
+	*/
 }

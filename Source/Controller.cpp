@@ -13,52 +13,43 @@
 #include "Solver.h"
 
 
-Controller::Controller()
+Controller::Controller(){}
+
+void MiseAJourCurrentPossibilities(int i, int j) {}
+
+sf::Vector2i Controller::CellToPosition(int i, int j)//Renvoie la position sur la fenetre de la cellule (i,j)
 {
-	
-	
+	int x = 15 + i * 30 + (i / 3) * 2;// 15 pour la marge, i*30 pour la position de la cellule, décalée de 2 pixels à chaque fois qu'on passe dans la région suivante
+	int y = 15 + j * 30 + (j / 3) * 2;//idem
+	return sf::Vector2i(x,y);
 }
 
-void MiseAJourCurrentPossibilities(int i, int j) {
-
-
-
-}
-
-sf::Vector2i Controller::CellToPosition(int i, int j)
-{
-	int P[2];
+void Controller::MaJHighlights(int i , int j) { //Recentre les rectangles de surlignage sur la cellule (i,j)
 	
-
-	P[0] = 15 + i * 30 + (i / 3) * 2;// 15 pour la marge, i*30 pour la position de la cellule, décalée de 2 pixels à chaque fois qu'on passe dans la région suivante
-	P[1] = 15 + j * 30 + (j / 3) * 2; //idem
-	return sf::Vector2i(P[0], P[1]);
-}
-
-void Controller::MaJHighlights(int i , int j) {
-	
-	HighHorizontal.setPosition(sf::Vector2f(15, CellToPosition(i, j).y));
-	HighVertical.setPosition(sf::Vector2f(CellToPosition(i, j).x, 15));
-	HighRegion.setPosition(sf::Vector2f(CellToPosition(3 * (i / 3), 0).x, CellToPosition(0, 3 * (j / 3)).y));
+	HighHorizontal.setPosition(sf::Vector2f(15, CellToPosition(i, j).y)); //La ligne de surlignage se décale à l'ordonnée de la cellule
+	HighVertical.setPosition(sf::Vector2f(CellToPosition(i, j).x, 15)); //La colonne de surlignage se décale à l'abscisse de la cellule
+	HighRegion.setPosition(sf::Vector2f(CellToPosition(3 * (i / 3), 0).x, CellToPosition(0, 3 * (j / 3)).y)); //Région, se décale à la case supérieure gauche de la région de 9 concernée
 }
 
 
-void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false)
-{
-	
-	for (int i = 0; i <= 8; ++i) {
+void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bool clear=false) 
+{//Pour une cellule (I,J) donnée, colore en rouge les celluiles directement en conflit avec elle, et elle meme si elle genere du conflit
+
+	for (int i = 0; i <= 8; ++i) { //On remet toutes les cellules en noir, pour peu que des cases soient en rouge d'une précédente PoliceDesCellules
 		for (int j = 0; j <= 8; ++j) {
-			(*buttonCell)[i][j].setOutlineColor(sf::Color::White);
-			(*buttonCell)[i][j].Texte.setColor((*buttonCell)[i][j].colorT);
-			
+			(*buttonCell)[i][j].setOutlineColor(sf::Color::White); //On reset le carré qui entoure une cellule en blanc
+			(*buttonCell)[i][j].Texte.setColor((*buttonCell)[i][j].colorT); //On reset le texte dans sa couleur normale (bleu ou noir suivant le type isFixed)
 		}
 	}
-	if (!clear) { //Si on est pas dans une fonction de 'clear', on met les cellules en rouge si besoin
-		list<list<int>> Errors = (*grid).getUnconsistentCells(I, J);
+	if (!clear) { //Si clear==true, on a donc une fonction qu nettoye seulement de toute coloration rouge d'une PoliceDesCellules
+
+		list<list<int>> Errors = (*grid).getUnconsistentCells(I, J); //On parcours la list des indices de cellules en conflit
+
 		for (std::list<list<int>>::iterator it = Errors.begin(); it != Errors.end(); it++) {
-			//Si il y a entrée dans la boucle, il y a erreur donc on colore la cellule concernée
-			(*buttonCell)[I][J].setOutlineColor(sf::Color::Red);
-			(*buttonCell)[I][J].Texte.setColor(sf::Color::Red);
+			//Si il y a entrée dans la boucle, il y a au moins une erreur donc on colore la cellule concernée
+			(*buttonCell)[I][J].setOutlineColor(sf::Color::Red); // Carré
+			(*buttonCell)[I][J].Texte.setColor(sf::Color::Red); //Texte
+			//Puis on colore la cellule tierce en conflit
 			(*buttonCell)[(*it).front()][(*it).back()].Texte.setColor(sf::Color::Red);
 		}
 	}
@@ -67,8 +58,9 @@ void PoliceDesCellules(Grille *grid, Button(*buttonCell)[9][9], int I, int J, bo
 
 
 void Controller::run(){
-	sf::RenderWindow window(sf::VideoMode(419, 419), "SudokuSolver", sf::Style::Close);
-	//Couleurs
+	//Definition de la fenètre
+	sf::RenderWindow window(sf::VideoMode(419, 344), "SudokuSolver", sf::Style::Close);
+	//Définition des couleurs
 	sf::Color CellColor = sf::Color(220, 220, 220, 255);
 	sf::Color GridColor= sf::Color(170, 170, 170, 255);
 	sf::Color BackColor= sf::Color(70, 70, 70, 255);
@@ -80,39 +72,48 @@ void Controller::run(){
 	sf::Color TransparentGreenColor = sf::Color(45, 193, 109, 100);
 
 	sf::Vector2i Position; //Position de la souris
-	Grille CurrentGrille = Grille::createTemplateEmpty();
-	Solver currentSolver(&CurrentGrille);
+	Grille CurrentGrille = Grille::createTemplateEmpty(); //Initialisatio d'une grille vide
+	Solver currentSolver(&CurrentGrille); //Initialisation
 	currentSolver.initiate();
-	phaseDeJeu = false;
+
+	phaseDeJeu = false; // On est dans la phase de définition, d'abord.
 	
-	//Elements de controles
+	//ActiveCell, de base désactivé et dans la cellule en haut a gauche.
 	ActiveCell[0] = 0;
 	ActiveCell[1] = 0;
 	ActiveCell[2] = 0;
 
+	//Le surlignage est désactivé
 	bool HighlightsGrid = false;
-	bool HighlightsTheme = true;
-	bool ConsistencyHelp = true;
-	bool ValuesHelp = true;
+	//Booléen d'aide
+	HighlightsGrid = false;
+	ConsistencyHelp = true;
+	ValuesHelp = true;
 	
+	//Chargement d'une police
 	sf::Font font;
 	if (!font.loadFromFile("arial_narrow_7.ttf"))
 	{
-		// error... 
+		throw 0;
 	}
 
 
-	//______Definition des dessin FIXES____
+	//______Definition des Boutons____
 
-	//---Grille
+	//___Grille___: Boutons qui couvre l'ensemble de la grille de sudoku, 
+	//sert à activer le surlignage quand a souris est dessus,
+	//et à entrer dans les boucles des boutons de cellules pour les différentes actions
 	Button RectGrille=Button::Button(CellColor,sf::Vector2f(15,15),sf::Vector2f(273,273), &font,"" , sf::Color(255,255,255,100));
 
-	//---ButtonCells
+	//___ButtonCell___: Boutons définit pour chaque cellule, avvec la valeur de cellule en texte
+	//sert à déclencher le changement de cellule active
+	//et afficher les différentes couleurs de valeurs (rouge "en conflit", noir "fixé" et bleu "rentré par l'utilisateur")
 	Button ButtonCell[9][9];
+	//Parcours de la grille
 	for (int i = 0; i <= 8; ++i) {
 		for (int j = 0; j <= 8; ++j) {
 			//Constructeur de ButtonCells
-			if ((*CurrentGrille.getCell(i, j)).isFixed) {
+			if ((*CurrentGrille.getCell(i, j)).isFixed) { //La cellule est de valeur fixée, on définit alors avec la couleur noire
 				ButtonCell[i][j] = Button(sf::Color::Transparent,
 					sf::Vector2f(CellToPosition(i, j).x + 1, CellToPosition(i, j).y + 1), 
 					sf::Vector2f(27, 27), 
@@ -120,7 +121,7 @@ void Controller::run(){
 					sf::Color::Black
 					);
 			}
-			else {
+			else { //La cellule est modifiable -> bleu
 				ButtonCell[i][j] = Button(sf::Color::Transparent,
 					sf::Vector2f(CellToPosition(i, j).x + 1, CellToPosition(i, j).y + 1), 
 					sf::Vector2f(27, 27), 
@@ -128,48 +129,53 @@ void Controller::run(){
 					sf::Color::Blue
 					);
 			}
-			
+			//Définition du carré de selection blanc
 			ButtonCell[i][j].setOutlineColor(sf::Color::White);
-			//Fonction du bouton
+
+			//Fonction du ButtonCell[i][j]
 			ButtonCell[i][j].AddHandler([&, i , j ]() {
-				ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
-				ButtonCell[ActiveCell[1]][ActiveCell[2]].setOutlineThickness(0);
-				ActiveCell[0] = 1;
+
+				ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent); //L'ancienne ActiveCell reprend sa forme ancienne, comme les autres
+				ButtonCell[ActiveCell[1]][ActiveCell[2]].setOutlineThickness(0); //idem, retrait du carré de selection
+
+				ActiveCell[0] = 1;//On redéfinit ActiveCell
 				ActiveCell[1] = i;
 				ActiveCell[2] = j;
-				ButtonCell[i][j].setFillColor(CancelColor);
+				ButtonCell[i][j].setFillColor(CancelColor);//Mise en forme de la nouvelle ActiveCell
 				ButtonCell[i][j].setOutlineThickness(1);
-				MaJHighlights(i, j);
-				HighlightsGrid = true;
 
-				if (ConsistencyHelp) {
+				MaJHighlights(i, j); //On replace les carrés, car on a pu changer d'endroit à cause du déclenchement clavier
+				HighlightsGrid = true; //On affiche le surlignage lors d'une selection
+
+				if (ConsistencyHelp) { //Si on à l'aide à la consistence, on affiche les conflits (PoliceDesCellules)
 					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
 				}
-				//Mise à jour des currentPoss
+				//Mise à jour des valeurs possibles
 				for (int k = 0; k <= 8; ++k) {
+					//On redefinit les possibilités de valeurs dans (i,j), car elles ont pu changer
 					currentPossibilities.setPossibility(k, (*(*CurrentGrille.getCell(i, j)).getPossibilities()).getPossibility(k));
 				}
 				if (CurrentGrille.isCellConsistent(i, j)) {
+					//Si la cellule n'est pas en conflit, la valeur actuelle est aussi possible. l'Algo "getPossibilities l'exclus.
 					currentPossibilities.setPossibility((*CurrentGrille.getCell(i, j)).getValue()-1, true);
 				}
-				
-
 			});
 		}
 	}
 
-	//
-	//---Grille
+
+	//___VictoryButton___: Bouton de victoire pour quitter la fenetre à la finde la partie
 	Button VictoryButton = Button::Button(
 		BackColor, 
 		sf::Vector2f(15, 294),
 		sf::Vector2f(389, 35), 
 		&font, "You won ! Click to end", 
 		GreenColor);
-	VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() * 2);
-	VictoryButton.Centering();
+	VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() * 2); //Paramètre arbitraire, pris sur un texte fixe pour un meilleur rendu particulier
+	VictoryButton.Centering(); //On recentre après resizing
 
-	//---CancelButton
+
+	//___CancelButton___: Bouton d'annulation : déselectionne la cellule en cours
 	Button CancelButton = Button(
 		CancelColor, 
 		sf::Vector2f(304, 151),
@@ -177,20 +183,23 @@ void Controller::run(){
 		&font,
 		"Cancel",
 		BackColor);
-	//-Fonction Cancel
+
+	//Définition de la fonction Cancel
 	CancelButton.AddHandler([&]() {
-		ActiveCell[0] = 0;
-		ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+		ActiveCell[0] = 0; //Il n'y a plus d'ActiveCell
+		ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);//ActiveCell retrouve sa forme normale
 		ButtonCell[ActiveCell[1]][ActiveCell[2]].setOutlineThickness(0);
-		if ( ! (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y))) {
+
+		if ( ! (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y))) { 
+			//Si la souris n'est pas dans la grille à ce moment (c'est possible grace au bouton "entrée" du clavier), on désactive le surlignage
 			HighlightsGrid = false;
 		}
-		else { //On selectionne celle sous la souris
+		else { //Si la souris est dans la grille, le surlignage, alors fixé pour l'activeCell, se met sur la souris
 			for (int i = 0; i <= 8; ++i) {
 				for (int j = 0; j <= 8; ++j) {
-					if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-						MaJHighlights(i, j);
-						HighlightsGrid = true;
+					if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) { //si la souris est sur cette cellule
+						MaJHighlights(i, j); //On met à jour le surlignage sur la cellule en question
+						HighlightsGrid = true; //On active le surlignage
 					}
 				}
 			}
@@ -198,7 +207,7 @@ void Controller::run(){
 		}
 	});
 
-	//---ResetButton
+	//___ResetButton__ : revient au problème initial
 	Button ResetButton = Button(
 		GridColor,
 		sf::Vector2f(15, 294),
@@ -206,13 +215,14 @@ void Controller::run(){
 		&font,
 		"Reset",
 		BackColor);
-	ResetButton.AddHandler([&]() {
+	//Fonction "Reset"
+	ResetButton.AddHandler([&]() { 
 		for (int i = 0; i <= 8; ++i) {
 			for (int j = 0; j <= 8; ++j) {
-				if (!(*CurrentGrille.getCell(i, j)).isFixed) {
-					(*CurrentGrille.getCell(i, j)).setValue(0);
-					currentSolver.update(i, j, 0);
-					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
+				if (!(*CurrentGrille.getCell(i, j)).isFixed) {//Toutes les cellules non fixées (donc devinées par l'utilisateur) sont...
+					(*CurrentGrille.getCell(i, j)).setValue(0); //Remise à 0
+					currentSolver.update(i, j, 0); //On update les solutions
+					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]); 
 				}
 			}
 		}
@@ -265,28 +275,28 @@ void Controller::run(){
 
 	//---Help Menu
 	Button HelpMenu = Button(
-		sf::Color::Cyan,
+		CancelColor,
 		sf::Vector2f(306, 187),
 		sf::Vector2f(96, 30),
 		&font,
 		"Help",
 		BackColor);
 	HelpMenu.setOutlineThickness(2);
-	HelpMenu.setOutlineColor(sf::Color::Cyan);
+	HelpMenu.setOutlineColor(CancelColor);
 
 	//---ConsistencyHelpButton
 	Button CHelpButton = Button(
-		sf::Color::Cyan,
+		CancelColor,
 		sf::Vector2f(306, 220),
 		sf::Vector2f(96, 32),
 		&font,
-		"Check (off)",
+		"Check (on)", //En début de programme : l'aide est activée pour aider à la conception d'une grille
 		BackColor);
 	CHelpButton.setOutlineThickness(2);
 	CHelpButton.setOutlineColor(CHelpButton.colorF);
 	CHelpButton.Sizing();
 	CHelpButton.Centering();
-	CHelpButton.EnfonceurButton(); //l'aide est activée pour la conception de grille
+	CHelpButton.EnfonceurButton(); //le bouton est également activé
 
 	CHelpButton.AddHandler([&]() {
 		if (ConsistencyHelp) {
@@ -316,17 +326,17 @@ void Controller::run(){
 
 	//---PossibleValuesHelpButton
 	Button HelpValuesButton = Button(
-		sf::Color::Cyan,
+		CancelColor,
 		sf::Vector2f(306, 254),
 		sf::Vector2f(96, 32),
 		&font,
-		"Values (off)",
+		"Values (on)",//En début de programme : l'aide est activée pour aider à la conception d'une grille
 		BackColor);
 	HelpValuesButton.setOutlineThickness(2);
 	HelpValuesButton.setOutlineColor(HelpValuesButton.colorF);
 	HelpValuesButton.Sizing();
 	HelpValuesButton.Centering();
-	HelpValuesButton.EnfonceurButton(); //l'aide est activée pour la conception de grille
+	HelpValuesButton.EnfonceurButton(); //le bouton est également activé
 	HelpValuesButton.AddHandler([&]() {
 		if (ValuesHelp) {
 			ValuesHelp = false;
@@ -369,13 +379,21 @@ void Controller::run(){
 						(*CurrentGrille.getCell(i, j)).isFixed = true;
 						ButtonCell[i][j].colorT = sf::Color::Black;
 						ButtonCell[i][j].Texte.setColor(sf::Color::Black);
+
+						//On reset les fonctions d'aide à "off" pour la phase de jeu
 						if (ValuesHelp) {
 							ValuesHelp = false;
+							HelpValuesButton.Texte.setString("Values (off)");
 							HelpValuesButton.EnfonceurButton();
+							HelpValuesButton.Sizing();
+							HelpValuesButton.Centering();
 						}
 						if (ConsistencyHelp) {
 							ConsistencyHelp = false;
+							CHelpButton.Texte.setString("Check (off)");
 							CHelpButton.EnfonceurButton();
+							CHelpButton.Sizing();
+							CHelpButton.Centering();
 						}
 					}
 					currentSolver.update(i, j, (*CurrentGrille.getCell(i, j)).getValue());
@@ -397,7 +415,6 @@ void Controller::run(){
 		BackColor);
 	TemplateButton.AddHandler([&]() {
 		CurrentGrille = Grille::createTemplateMissing();
-		FixerButton.CallHandler();
 	});
 
 
@@ -426,7 +443,6 @@ void Controller::run(){
 	//--Handlers de modification
 	for (int i = 0; i <= 9; ++i) {
 		ButtonVal[i].AddHandler([&, i]() {
-			std::cout << "ActiveCell " + std::to_string(ActiveCell[0]) << std::endl;
 			if (ActiveCell[0] == 1) {
 				if ((*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).isFixed == false) {
 					(*CurrentGrille.getCell(ActiveCell[1], ActiveCell[2])).setValue(i);
