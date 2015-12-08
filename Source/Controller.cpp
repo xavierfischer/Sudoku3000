@@ -100,6 +100,12 @@ void Controller::run(){
 
 
 	//______Definition des Boutons____
+	//On va d'abord définir tous les bouttons, leur action et les rectangles de mise à jour, 
+	//puis on gerera la boucle de rafraichissement de la fenetre 
+	//en testant les evenements souris et clavier et en dessinant les formes ainsi mises à jour
+	//________________________________
+
+
 
 	//___Grille___: Boutons qui couvre l'ensemble de la grille de sudoku, 
 	//sert à activer le surlignage quand a souris est dessus,
@@ -208,7 +214,7 @@ void Controller::run(){
 		}
 	});
 
-	//___ResetButton__ : revient au problème initial
+	//___ResetButton__ : revient au problème initial, ie efface les cellules rentrées par l'utilisateur
 	Button ResetButton = Button(
 		GridColor,
 		sf::Vector2f(15, 294),
@@ -221,7 +227,7 @@ void Controller::run(){
 		for (int i = 0; i <= 8; ++i) {
 			for (int j = 0; j <= 8; ++j) {
 				if (!(*CurrentGrille.getCell(i, j)).isFixed) {//Toutes les cellules non fixées (donc devinées par l'utilisateur) sont...
-					(*CurrentGrille.getCell(i, j)).setValue(0); //Remise à 0
+					(*CurrentGrille.getCell(i, j)).setValue(0); //..remises à 0
 					currentSolver.initiate();
 					PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]); 
 				}
@@ -229,27 +235,8 @@ void Controller::run(){
 		}
 		CancelButton.CallHandler();
 	});
-/*
-	//---comLine1
-	Button comLine1 = Button(
-		GreenColor,
-		sf::Vector2f(15, 329),
-		sf::Vector2f(389, 40),
-		&font,
-		"Sudoku Solver !",
-		BackColor);
-	//---comLine2
-	Button comLine2 = Button(
-		GreenColor,
-		sf::Vector2f(15, 369),
-		sf::Vector2f(389, 40),
-		&font,
-		"Creez une grille ou charger un template aléatoire",
-		BackColor);
-*/
 
-
-	//---SolveButton
+	//___Bouton Solve : Appelle l'algorythme de résolution, après avoir nettoyé les valeurs rentrés par l'utilisateur (potentiellement fausses).
 	Button SolveButton = Button(
 		GreenColor,
 		sf::Vector2f(107, 294),
@@ -258,19 +245,20 @@ void Controller::run(){
 		"Solve",
 		BackColor);
 	SolveButton.AddHandler([&]() {
+		ResetButton.CallHandler();//On nettoye les valeurs de l'utilisateur
 		MasterSolve master(&CurrentGrille);
 		master.solve();
 
 		if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
 			//Le solver à réussi
-			VictoryButton.Texte.setString("Was it THAT hard ? Click to end");
+			VictoryButton.Texte.setString("Was it THAT hard ? Click to end"); //Affichage du message de fin
 			VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() /1.8 );
 			VictoryButton.Centering();
 			Victory = 1;
 		}
 
 	});
-	//---HintButton
+	//Bouton "Hint"
 	Button HintButton = Button(
 		GreenColor,
 		sf::Vector2f(199, 294),
@@ -280,23 +268,29 @@ void Controller::run(){
 		BackColor);
 	HintButton.AddHandler([&]() {
 		MasterSolve master(&CurrentGrille);
-		master.solveUnit();
-
-
+		master.solveUnit();// On appelle le resolveur pour une seule cellule
+		//On parcours toutes les cellules pour voir laquelle a été modifée, et on la selectionne pour le montrer à l'utilisateur
 		for (int i = 0; i <= 8; ++i) {
 			for (int j = 0; j <= 8; ++j) {
 				//Si la valeur est differente du texte, on l'active
 				if (std::to_string((*CurrentGrille.getCell(i, j)).getValue()) != ButtonCell[i][j].Texte.getString() &
 					(*CurrentGrille.getCell(i, j)).getValue() !=0) {
-					ButtonCell[i][j].CallHandler();
+					ButtonCell[i][j].CallHandler();//Activation de la cellule
 					break;
 				}
 			}
 		}
+		//Si c'est la dernière cellule, on active la victoire
+		if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
+			VictoryButton.Texte.setString("Was it THAT hard ? Click to end"); //Affichage du message de fin
+			VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() / 1.8);
+			VictoryButton.Centering();
+			Victory = 1;
+		}
 	});
 	
 
-	//---Help Menu
+	//---Help Menu : Rectangle Titre de l'aide
 	Button HelpMenu = Button(
 		CancelColor,
 		sf::Vector2f(306, 187),
@@ -307,7 +301,7 @@ void Controller::run(){
 	HelpMenu.setOutlineThickness(2);
 	HelpMenu.setOutlineColor(CancelColor);
 
-	//---ConsistencyHelpButton
+	//__Boutton pour activer l'aide à la consistence. Quend elle est activée, la cellule devient rouge quand on detecte un conflit direct avec une autre.
 	Button CHelpButton = Button(
 		CancelColor,
 		sf::Vector2f(306, 220),
@@ -319,35 +313,33 @@ void Controller::run(){
 	CHelpButton.setOutlineColor(CHelpButton.colorF);
 	CHelpButton.Sizing();
 	CHelpButton.Centering();
-	CHelpButton.EnfonceurButton(); //le bouton est également activé
+	CHelpButton.EnfonceurButton(); //le bouton est également activé, en début de programme
 
 	CHelpButton.AddHandler([&]() {
 		if (ConsistencyHelp) {
-
+			//Désactivation
 			ConsistencyHelp = false;
 			CHelpButton.Texte.setString("Check (off)");
 			CHelpButton.Sizing();
 			CHelpButton.Centering();
-			if (ActiveCell[0] == 1) {
-				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2], true);
+			if (ActiveCell[0] == 1) { //Si une cellule est selectionnée, ie il peut y avoir des cellules rouges
+				PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2], true); //On remet tout à 0 (attribut clear=true)
 			}
-
 		}
-		else {
+		else {//Activation
 			ConsistencyHelp = true;
 			CHelpButton.Texte.setString("Check (on)");
 			CHelpButton.Sizing();
 			CHelpButton.Centering();
 
-			if (ActiveCell[0] == 1) {
-
+			if (ActiveCell[0] == 1) {//Si une cellule est activée, on checke si elle est consistente
 			PoliceDesCellules(&CurrentGrille, &ButtonCell, ActiveCell[1], ActiveCell[2]);
 			}
 		}
-		CHelpButton.EnfonceurButton();
+		CHelpButton.EnfonceurButton(); //Le boutton change de forme
 	});
 
-	//---PossibleValuesHelpButton
+	//___Bouton d'aide au valeurs possibles
 	Button HelpValuesButton = Button(
 		CancelColor,
 		sf::Vector2f(306, 254),
@@ -366,7 +358,7 @@ void Controller::run(){
 			ValuesHelp = false;
 			HelpValuesButton.Texte.setString("Values (off)");
 			HelpValuesButton.Sizing();
-			HelpValuesButton.Centering(); // On change le Texte donc il faaut resizer et recentrer le texte
+			HelpValuesButton.Centering(); // On change le Texte donc il faut resizer et recentrer le texte
 		}
 		else {
 			ValuesHelp = true;
@@ -651,16 +643,18 @@ void Controller::run(){
 
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left) {
+					//Si click, on actualise aussi la position
 					Position = sf::Mouse::getPosition(window);
-					//Cas de victoire
+
+					//Click sur le boutton de victoire de fin
 					if (Victory) {
 						if (VictoryButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-							window.close();
+							window.close();//Fin de partie
 						}
 					}
 					else {
-						//Verification pour ButtonCell
-						if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Verification pour chaque cellule
+						if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) { //On checke si la souris est bien sur la grille, pour éviter 81 itérations intuiles
 							for (int i = 0; i <= 8; ++i) {
 								for (int j = 0; j <= 8; ++j) {
 									if (ButtonCell[i][j].getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
@@ -670,75 +664,73 @@ void Controller::run(){
 								}
 							}
 						}
-						//Verification pour le Cancel
-						else if (ActiveCell[0] == 1 & CancelButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-							//ActiveCell[0] = 0;
-							//ButtonCell[ActiveCell[1]][ActiveCell[2]].setFillColor(sf::Color::Transparent);
+						//Bouton Cancel (deselection de celulle)
+						else if (ActiveCell[0] == 1 
+							& CancelButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							CancelButton.CallHandler();
 						}
-						//TemplateButton
-						else if (!phaseDeJeu & TemplateButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Bouton Génération de grille
+						else if (!phaseDeJeu 
+							& TemplateButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							TemplateButton.CallHandler();
 						}
-						//FixerButton
-						else if (!phaseDeJeu & FixerButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Bouton "Play"
+						else if (!phaseDeJeu 
+							& FixerButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							FixerButton.CallHandler();
 						}
-						//ResetButton
-						else if (phaseDeJeu & ResetButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Bouton Reset
+						else if (phaseDeJeu & 
+							ResetButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							ResetButton.CallHandler();
 						}
-						//SolveButton
-						else if (phaseDeJeu & SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Bouton Solve
+						else if (phaseDeJeu & 
+							SolveButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							SolveButton.CallHandler();
 						}
-						//HintButton
-						else if (phaseDeJeu & HintButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
+						//Bouton Hint
+						else if (phaseDeJeu & 
+							HintButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							HintButton.CallHandler();
 						}
-						//ConsistencyButton
+						//Bouton Aide à la consistence
 						else if (CHelpButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 
 							CHelpButton.CallHandler();
 						}
-						//HelpValuesButton
+						//Bouton aide aux valeurs possibles
 						else if (HelpValuesButton.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
 							HelpValuesButton.CallHandler();
 						}
-						// ButtonVal
+						//Bouton d'assignation de valeur
 						else {
 							for (int i = 0; i <= 9; ++i) {
 								if (ButtonVal[i].getGlobalBounds().contains((float)Position.x, (float)Position.y) &
 									ActiveCell[0] == 1
 									) {
-									if (ValuesHelp & (i > 0) & !(currentPossibilities.getPossibility(i - 1))) {
-										//La valeur n'est pas prise en compte
+									if (ValuesHelp & //Si l'aide aux valeurs est activée
+										(i > 0) & //pour toutes les cellules != "Delete"
+										!(currentPossibilities.getPossibility(i - 1))) {//Si la possibilité de cette valeur est false..
+										//..cliquer sur le boutton ne change rien
 									}
-									else {
+									else { //Comprtement normal
 										ButtonVal[i].CallHandler();
 									}
-
 								}
 							}
-
 						}
 					}	
 				}
 
 
 
-				// Cas clavier
+				// Cas où le clavier est activé
 			case sf::Event::KeyPressed:
 				
 				switch (event.key.code) {
-				/*
-
-				//---Si espace, fermer---
-				case sf::Keyboard::Space:
-					window.close();
-					break;*/
-
-				//Valeurs de suppression
+				
+				//Cas de suppression de la valeur d'une cellule
 				case sf::Keyboard::Numpad0 :
 					ButtonVal[0].CallHandler();
 					break;
@@ -748,7 +740,7 @@ void Controller::run(){
 				case sf::Keyboard::Delete:
 					ButtonVal[0].CallHandler();
 					break;
-				//Valeurs de modification
+				//Valeurs de modification de la cellule
 				case sf::Keyboard::Numpad1:
 					ButtonVal[1].CallHandler();
 					break;
@@ -779,13 +771,14 @@ void Controller::run(){
 
 				//Selection / Déselection
 				case sf::Keyboard::Return:
-					if (ActiveCell[0] == 1) {
-						CancelButton.CallHandler(); // On déselectionne
+					//Dans ce cas, la touche "Entrée" deselectionne la cellule active, ou selectionne la case sous la souris. 
+					//Si la souris n'est pas sur la grille, elle selectionne la dernière cellule active
+
+					if (ActiveCell[0] == 1) { //Une cellule est activée, on déselectionne
+						CancelButton.CallHandler();
 					}
 					else {//On selectionne
-
-						if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) {
-
+						if (RectGrille.getGlobalBounds().contains((float)Position.x, (float)Position.y)) { 
 							//La souris est dans la grille, on selectionne la cellule dessous
 							HighlightsGrid = true;
 							for (int i = 0; i <= 8; ++i) {
@@ -796,52 +789,48 @@ void Controller::run(){
 								}
 							}
 						}
-						else {
-							ButtonCell[ActiveCell[1]][ActiveCell[2]].CallHandler(); //On reselectionne la dernière
-						}
-							
+						else {//La souris n'est pas dans la grille, on reselectionne la dernière
+							ButtonCell[ActiveCell[1]][ActiveCell[2]].CallHandler(); 
+						}	
 					}
-						
 					break;
 
-				//Parcours avec les fleches
+				//Parcours avec les fleches de la grille
 					
 				case sf::Keyboard::Left:
 					if (ActiveCell[0] == 1 & ActiveCell[1] > 0 ) { 
-						//Si une cellule est active + si on n'est pas dans la colonne tout à gauche
+						//Si une cellule est active et si on n'est pas dans la colonne tout à gauche, alors on peut se déplacer à gauche
 						ButtonCell[ActiveCell[1]-1][ActiveCell[2]].CallHandler();
 						break;
 					}
 					break;
 				case sf::Keyboard::Right:
-					if (ActiveCell[0] == 1 & ActiveCell[1] < 8) {
+					if (ActiveCell[0] == 1 & ActiveCell[1] < 8) { //idem
 						ButtonCell[ActiveCell[1]+1][ActiveCell[2]].CallHandler();
 						break;
 					}
 					break;
 				case sf::Keyboard::Up:
-					if (ActiveCell[0] == 1 & ActiveCell[2] > 0) {
+					if (ActiveCell[0] == 1 & ActiveCell[2] > 0) { //idem
 						ButtonCell[ActiveCell[1]][ActiveCell[2]-1].CallHandler();
 						break;
 					}
 						break;
 				case sf::Keyboard::Down:
-					if (ActiveCell[0] == 1 & ActiveCell[2] <8) {
+					if (ActiveCell[0] == 1 & ActiveCell[2] <8) { //idem
 						ButtonCell[ActiveCell[1]][ActiveCell[2]+1].CallHandler();
 						break;
 					}
 					break;
-
 				default:
 					continue;
 				}
-				
 			default:
 				continue;
 			}
 		}
 
-		//__Drawing__
+		//__On rend les differentes formes__
 
 		//---Clear
 		window.clear(BackColor);
@@ -849,7 +838,7 @@ void Controller::run(){
 		//---Fond de Grille
 		window.draw(RectGrille);
 
-		//Highlights
+		//Highlights, à remplir avant la grille et les ButtonCell
 		if (HighlightsGrid) {
 			window.draw(HighHorizontal);
 			window.draw(HighVertical);
@@ -857,25 +846,27 @@ void Controller::run(){
 		}
 		
 
-		//--Dessin des Cellules
+		//--Dessin des Cellules (ButtonCell)
 		for (int i = 0; i <= 8; ++i) {
 			for (int j = 0; j <= 8; ++j) {
-				//--Dessin des buttons
+				//__Dessin des buttons (la plupart du temps transparent, sauf quand la cellule est activée)
 				window.draw(ButtonCell[i][j]);
 
 				//Textes des cases - Mise à jour
-				if ((*CurrentGrille.getCell(i, j)).getValue() == 0) { //Si value=0, on n'écrit rien
+				if ((*CurrentGrille.getCell(i, j)).getValue() == 0) { 
+					   //Si value=0, on n'écrit rien
 					ButtonCell[i][j].Texte.setString(" ");
 				}
 				else { //Sinon on écrit la value
 					ButtonCell[i][j].Texte.setString(std::to_string((*CurrentGrille.getCell(i, j)).getValue()));
 				}
+
 				//On rend le texte une fois mis à jour
 				window.draw(ButtonCell[i][j].Texte);
 			}
 		}
 
-		//Si une cellule est activée, on rend le clavier virtuel
+		//Si une cellule est activée, on rend le clavier virtuel (ButtonVal + CancelButton)
 		if (ActiveCell[0] == 1) {
 			window.draw(CancelButton);
 			window.draw(CancelButton.Texte);
@@ -890,7 +881,7 @@ void Controller::run(){
 		}
 
 
-		//--Bouton Solve
+		//__Phase de jeu sans victoire
 		if (phaseDeJeu & !Victory) {
 			window.draw(SolveButton);
 			window.draw(SolveButton.Texte);
@@ -899,38 +890,25 @@ void Controller::run(){
 			window.draw(ResetButton);
 			window.draw(ResetButton.Texte);
 		}
-		else if (Victory) {
+		else if (Victory) { //Victoire
 			window.draw(VictoryButton.Texte);
 
 		}
-		else {
+		else { //Definition de grille
 			window.draw(TemplateButton);
 			window.draw(TemplateButton.Texte);
 			window.draw(FixerButton);
 			window.draw(FixerButton.Texte);
 		}
 		
-
-
+		//Menu d'aide
 		window.draw(HelpMenu);
 		window.draw(HelpMenu.Texte);
-
-		if (ConsistencyHelp & !ValuesHelp) {
-			window.draw(HelpValuesButton);
-			window.draw(HelpValuesButton.Texte);
-			window.draw(CHelpButton);
-			window.draw(CHelpButton.Texte);
-		}
-		else {
-			window.draw(CHelpButton);
-			window.draw(CHelpButton.Texte);
-			window.draw(HelpValuesButton);
-			window.draw(HelpValuesButton.Texte);
-		}
+		window.draw(HelpValuesButton);
+		window.draw(HelpValuesButton.Texte);
+		window.draw(CHelpButton);
+		window.draw(CHelpButton.Texte);
 		
-
-		//Higlights
-
 		//On met la grille par dessus le reste
 		window.draw(Plinev, 12, sf::Lines);
 		window.draw(Plineh, 12, sf::Lines);
@@ -941,23 +919,9 @@ void Controller::run(){
 		window.draw(Glineh2);
 		window.draw(Limh);
 
-		if (Victory) {
-
-		}
-
-		/*window.draw(comLine1);
-		window.draw(comLine2);
-		window.draw(comLine1.Texte);
-		window.draw(comLine2.Texte);*/
-
-		/*if (ActiveCell[0] == 1) {
-			window.draw(ButtonCell[ActiveCell[1]][ActiveCell[2]]);
-			window.draw(ButtonCell[ActiveCell[1]][ActiveCell[2]].Texte);
-		}*/
-		
 		//Display
 		window.display();
-	}
+	}//Retour à la boucle "while(window.isOpen())"
 
 
 }
