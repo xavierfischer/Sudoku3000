@@ -1,13 +1,10 @@
 #include "Grille.h"
 
 /*
-	Une grille est un ensemble de 81 cellules
+	Cette classe définit une grille de 81 cellules. 
 */
 
-/*
-	Constructeur par défaut : toutes les cellules sont initialisées sans valeurs
-*/
-
+//Constructeur par défaut : toutes les cellules sont initialisées sans valeurs, la grille est donc vide
 Grille::Grille() {
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
@@ -16,14 +13,7 @@ Grille::Grille() {
 	}
 }
 
-Cellule *Grille::getCell(int i, int j) {
-	return &cells[i][j];
-}
-
-/*
-	Constructeur à partir de données entières : toutes les cellules sont initialisées par les valeurs données
-*/
-
+//Constructeur à partir de données entières : toutes les cellules sont initialisées par les valeurs données
 Grille::Grille(int * a[9])
 {
 	for (int i = 0; i < 9; i++) {
@@ -34,8 +24,12 @@ Grille::Grille(int * a[9])
 	}
 }
 
+Cellule *Grille::getCell(int i, int j) {
+	return &cells[i][j];
+}
+
 /*
-	Retourne un NineUplet représentant la région où se trouve la cellule (i, j)
+	Retourne un NineUplet (ensemble de neuf pointeurs de cellules) représentant la région où se trouve la cellule (i, j)
 */
 
 NineUplet Grille::getRegionFromCell(int i, int j)
@@ -91,7 +85,6 @@ NineUplet Grille::getLine(int i) {
 	}
 }
 
-
 /*
 	Retourne une NineUplet représentant la colonne i
 */
@@ -109,8 +102,7 @@ NineUplet Grille::getColumn(int j) {
 	}
 }
 
-
-
+//Indique si une grille ne présente pas d'irrégularités
 bool Grille::isConsistent() {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
@@ -132,10 +124,10 @@ bool Grille::isConsistent() {
 		if (!result)
 			return result;
 	}
-
 	return true;
 }
 
+// Indique si une grille est remplie
 bool Grille::isFull() {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
@@ -146,6 +138,7 @@ bool Grille::isFull() {
 	return true;
 }
 
+// Renvoie le nombre de cellules vides dans une grille
 int Grille::emptyValues() {
 	int count = 0;
 	for (int i = 0; i < 9; i++) {
@@ -156,8 +149,51 @@ int Grille::emptyValues() {
 	return count;
 }
 
+
 /*
-	Template grid full
+	Retourne la liste des coordonnées des cellules incohérentes avec la cellule passée paramètre
+*/
+
+list<list<int>> Grille::getUnconsistentCells(int i, int j) {
+	list<list<int>> result;
+	Cellule cell = *getCell(i, j);
+	if (cell.getValue() != 0) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				Cellule lookedCell = *getCell(x, y);
+				if (x != i || y != j) {
+					if (lookedCell.getValue() == cell.getValue()) {
+						if (x == i || y == j || areInSameRegion(i, j, x, y)) {
+							list<int> c = { x,y };
+							result.push_front(c);
+						}
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+// Indique si deux coordonnées sont dans une même région
+bool Grille::areInSameRegion(int i, int j, int x, int y) {
+	if (i < 9 && i >= 0 && j < 9 && j >= 0) {
+		int regionI = (i - (i % 3)) / 3;
+		int regionJ = (j - (j % 3)) / 3;
+		int regionX = (x - (x % 3)) / 3;
+		int regionY = (y - (y % 3)) / 3;
+		return regionI == regionX && regionJ == regionY;
+	}
+}
+
+//Indique si la cellule de coordonnées (i,j) présent des irrégularités ou non
+bool Grille::isCellConsistent(int i, int j) {
+	list<list<int>> v = getUnconsistentCells(i, j);
+	return (int)v.size() == 0;
+}
+
+/*
+	TEMPLATES : 
 */
 
 Grille Grille::createTemplate() {
@@ -174,10 +210,6 @@ Grille Grille::createTemplate() {
 	Grille grille(data);
 	return grille;
 }
-
-/*
-Template grid with no 2s
-*/
 
 Grille Grille::createTemplateMissing() {
 	int l1[9] = { 1,0,3,4,5,6,7,8,9 };
@@ -254,13 +286,6 @@ Grille Grille::createTemplateHumanTest() {
 	return grille;
 }
 
-
-	
-
-/*
-Template grid with no 2s
-*/
-
 Grille Grille::createTemplateMissing2() {
 	int l1[9] = { 1,0,3,4,5,6,7,8,9 };
 	int l2[9] = { 4,5,6,7,8,9,1,0,3 };
@@ -275,10 +300,6 @@ Grille Grille::createTemplateMissing2() {
 	Grille grille(data);
 	return grille;
 }
-
-/*
-	Template grid with inconsistent cells
-*/
 
 Grille Grille::createTemplateWrong() {
 	int l1[9] = { 1,1,3,4,5,6,7,8,9 };
@@ -308,48 +329,4 @@ Grille Grille::createTemplateEmpty() {
 	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
 	Grille grille(data);
 	return grille;
-}
-
-/*
-	Donne les coordonnées des cellules incohérentes avec la cellule en paramètre
-*/
-
-list<list<int>> Grille::getUnconsistentCells(int i, int j) {
-	list<list<int>> result;
-	Cellule cell = *getCell(i, j);
-	if (cell.getValue() != 0) {
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				Cellule lookedCell = *getCell(x, y);
-				if (x != i || y != j) {
-					if (lookedCell.getValue() == cell.getValue()) {
-						if (x == i || y == j || areInSameRegion(i, j, x, y)) {
-							list<int> c = { x,y };
-							result.push_front(c);
-						}
-					}
-				}
-			}
-		}
-	}
-	return result;
-}
-
-/*
-	Dit si deux coordonnées sont dans la même région
-*/
-
-bool Grille::areInSameRegion(int i, int j, int x, int y) {
-	if (i < 9 && i >= 0 && j < 9 && j >= 0) {
-		int regionI = (i - (i % 3)) / 3;
-		int regionJ = (j - (j % 3)) / 3;
-		int regionX = (x - (x % 3)) / 3;
-		int regionY = (y - (y % 3)) / 3;
-		return regionI == regionX && regionJ == regionY;
-	}
-}
-
-bool Grille::isCellConsistent(int i, int j) {
-	list<list<int>> v = getUnconsistentCells(i, j);
-	return (int)v.size() == 0;
 }

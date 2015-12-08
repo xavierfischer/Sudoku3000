@@ -11,12 +11,9 @@ public:
 	Solver();
     Solver(Grille *grille);
     void initiate();
-	//void update(int, int, int);
 
 	int *hintComputer();
 	int *hintHuman();
-	bool isHintableComputer();
-	bool isHintableHuman();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
 	int Solver::hintHumanInNuple(NineUplet nuple, int value);
@@ -25,7 +22,5 @@ public:
 
 private:
 	Grille *grid;
-	bool hintableComputer;
-	bool hintableHuman;
 };
 #endif

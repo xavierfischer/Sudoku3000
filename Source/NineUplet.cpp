@@ -1,7 +1,7 @@
 #include "NineUplet.h"
 
 /**
-	NineUplet : ensemble de neuf cellules
+	NineUplet : ensemble de neuf cellules. Il peut être une région, une ligne ou une colonne
 */
 
 NineUplet::NineUplet(Cellule *a[9]){
@@ -10,6 +10,7 @@ NineUplet::NineUplet(Cellule *a[9]){
 	}
 }
 
+// Indique s'il y a ou non des incohérences entre les cellules de l'ensemble
 bool  NineUplet::isConsistent() const {
 	int count = 0;
 	for (int i = 1; i < 10; i++) {
@@ -31,6 +32,7 @@ Cellule  *NineUplet::getCell(int i)  const {
 	return cells[i];
 }
 
+//Indique si la valeur n (n=1..9) est présente ou non dans la zone
 bool  NineUplet::isPresent(int n) const // realValue
 {
 	for (int i = 0; i < 9; i++) {
