@@ -26,4 +26,5 @@ public:
 	bool ValuesHelp = false;
 	bool Victory = false;
 	Possibilities currentPossibilities;
+	bool phaseDeJeu = false;
 };

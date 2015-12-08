@@ -35,7 +35,7 @@ sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {
 void Button::Centering() {
 	float x = getPosition().x;
 	float y = getPosition().y;
-	float Sx = Texte.getCharacterSize()*Texte.getString().getSize() / 5;
+	float Sx = Texte.getCharacterSize()*Texte.getString().getSize() / 4.7;
 	float Sy = Texte.getCharacterSize() / 1.6;
 
 	x = x + getSize().x / 2 - Sx;

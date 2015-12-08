@@ -238,6 +238,21 @@ Grille Grille::createTemplateWrong() {
 	return grille;
 }
 
+Grille Grille::createTemplateEmpty() {
+	int l1[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l2[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l3[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l4[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l5[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l6[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l7[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l8[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l9[9] = { 0,0,0,0,0,0,0,0,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
 /*
 	Donne les coordonnées des cellules incohérentes avec la cellule en paramètre
 */
