@@ -66,7 +66,8 @@ bool MasterSolve::solveUnit() {
 						Grille grilleBackTrack(*grid);
 						(*grilleBackTrack.getCell(i, j)).setValue(a);
 						MasterSolve backTrackSolver(&grilleBackTrack);
-						(*(*grid).getCell(i, j)).setValue(backTrackSolver.solveUnit() ? a : b);
+
+						(*(*grid).getCell(i, j)).setValue(backTrackSolver.solve() ? a : b);
 						solver.initiate();
 						return true;
 					}
