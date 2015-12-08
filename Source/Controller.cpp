@@ -259,6 +259,15 @@ void Controller::run(){
 	SolveButton.AddHandler([&]() {
 		MasterSolve master(&CurrentGrille);
 		master.solve();
+
+		if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
+			//Le solver à réussi
+			VictoryButton.Texte.setString("Was it THAT hard ? Click to end");
+			VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() /1.8 );
+			VictoryButton.Centering();
+			Victory = 1;
+		}
+
 	});
 	//---HintButton
 	Button HintButton = Button(
