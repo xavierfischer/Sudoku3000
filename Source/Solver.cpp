@@ -209,18 +209,20 @@ int *Solver::hintComputer() {
 				int value1 = 0;
 				int value2 = 0;
 				for (int i = 0; i < 9; i++) {
-					value1 = (value1 == 0 && realP.getPossibility(i)) ? (i+1) : value1;
+					value1 = (value1 == 0 && realP.getPossibility(i)) ? (i + 1) : value1;
 					value2 = (value1 != 0 && realP.getPossibility(i)) ? (i + 1) : value2;
 				}
-				
 
 
 
 
 
 
-			} else {
-			hintableComputer = false;
+
+			}
+			else {
+				hintableComputer = false;
+			}
 		}
 	}
 	else {

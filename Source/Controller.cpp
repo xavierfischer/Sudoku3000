@@ -271,6 +271,18 @@ void Controller::run(){
 	HintButton.AddHandler([&]() {
 		MasterSolve master(&CurrentGrille);
 		master.solveUnit();
+
+
+		for (int i = 0; i <= 8; ++i) {
+			for (int j = 0; j <= 8; ++j) {
+				//Si la valeur est differente du texte, on l'active
+				if (std::to_string((*CurrentGrille.getCell(i, j)).getValue()) != ButtonCell[i][j].Texte.getString() &
+					(*CurrentGrille.getCell(i, j)).getValue() !=0) {
+					ButtonCell[i][j].CallHandler();
+					break;
+				}
+			}
+		}
 	});
 	
 
