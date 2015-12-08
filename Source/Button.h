@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __Sudoku__BUTTON
+#define __Sudoku__BUTTON
+
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "Controller.h"
@@ -38,3 +40,4 @@ private:
 
 
 };
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __Sudoku__CONTROLLER
+#define __Sudoku__CONTROLLER
 
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -6,7 +7,6 @@
 #include <thread>
 #include "Cellule.h"
 #include "Button.h"
-#include "Controller.h"
 #include "Grille.h"
 #include "MasterSolve.h"
 
@@ -38,3 +38,4 @@ public:
 	Possibilities currentPossibilities; //On stocke 9 booléen qui représentent la possibilité pour chaque valeur d'être dans la cellule activée
 	bool phaseDeJeu = false; //Si False, on est dans la phase de définition du Sudoku, à True, on joue.
 };
+#endif

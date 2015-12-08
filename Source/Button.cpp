@@ -7,20 +7,19 @@
 #include "Controller.h"
 
 Button::Button() {
-
 }
 
 //Constructeur complet, avec définition d'un texte
 Button::Button(sf::Color colorFB, sf::Vector2f positionB, sf::Vector2f sizeB, sf::Font *fontT, std::string stringT, sf::Color colorT)
 {
-	setFillColor(colorFB);
-	setPosition(positionB);
+	setFillColor(colorFB); //Couleur de fond
+	setPosition(positionB); 
 	setSize(sizeB);
 	Texte = LinkedTexte(fontT, stringT, colorT);
-	Centering();
-	Sizing();
+	Sizing(); //Resizer le Texte
+	Centering(); //Centrer le texte
 	Button::colorF = colorFB;
-	Button::colorT = colorT;
+	Button::colorT = colorT; //Couleur de texte
 }
 
 sf::Text Button::LinkedTexte(sf::Font *font, std::string str, sf::Color color) {  //Retourne un texte avec ces attributs (Police, String de texte et couleur)
