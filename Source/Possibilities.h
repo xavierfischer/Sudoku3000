@@ -15,6 +15,7 @@ public:
 	void attach(int, int);
 	int attachedI;
 	int attachedJ;
+	int *resolveDual();
 
 private:
 	bool possibilities[9];

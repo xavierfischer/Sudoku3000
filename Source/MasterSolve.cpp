@@ -40,17 +40,43 @@ bool MasterSolve::solveUnit() {
 
 		if (hintHumanUnit()) {
 			solver.initiate();
-			cout << "Human" << endl;
 			return true;
 		}
 		else {
-			cout << " Try Computer" << endl;
 			if (hintComputerUnit()) {
 				solver.initiate();
-				cout << "Computer" << endl;
 				return true;
 			}
 			else {
+
+				//BACKTRACK
+
+				solver.initiate();
+				list<Possibilities> leftPoss = solver.leftPossibilities;
+				if (leftPoss.size() > 0) {
+					Possibilities poss = leftPoss.front();
+					if (poss.possibles() == 2) {
+						int a = 0, b = 0;
+						for (int i = 0; i < 9; i++) {
+							b = (a != 0 && b == 0 && poss.getPossibility(i)) ? i + 1 : b;
+							a = (a == 0 && poss.getPossibility(i)) ? i + 1 : a;
+						}
+						int i = poss.attachedI;
+						int j = poss.attachedJ;
+						Grille grilleBackTrack(*grid);
+						(*grilleBackTrack.getCell(i, j)).setValue(a);
+						MasterSolve backTrackSolver(&grilleBackTrack);
+						(*(*grid).getCell(i, j)).setValue(backTrackSolver.solveUnit() ? a : b);
+						solver.initiate();
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
 				return false;
 			}
 		}
@@ -61,14 +87,16 @@ bool MasterSolve::solveUnit() {
 }
 
 bool MasterSolve::solve() {
+	if ((*grid).isConsistent()) {
+		solver.initiate();
+		bool algoCanYouContinue = true;
 
-	solver.initiate();
-	bool algoCanYouContinue = true;
+		while (algoCanYouContinue) {
+			int missingValues = (*grid).emptyValues();
+			algoCanYouContinue = solveUnit();
+		}
 
-	while (algoCanYouContinue) {
-		int missingValues = (*grid).emptyValues();
-		algoCanYouContinue = solveUnit();
+		return (*grid).isFull();
 	}
-
-	return (*grid).isFull() && (*grid).isConsistent();
+	return false;
 }

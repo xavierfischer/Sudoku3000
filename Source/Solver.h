@@ -21,10 +21,10 @@ public:
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
 	int Solver::hintHumanInNuple(NineUplet nuple, int value);
 	bool initiated = false;
+	list<Possibilities> leftPossibilities;
 
 private:
 	Grille *grid;
-	list<Possibilities> leftPossibilities;
 	bool hintableComputer;
 	bool hintableHuman;
 };
