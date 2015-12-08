@@ -225,43 +225,6 @@ int *Solver::hintComputer() {
 	return coords;
 }
 
-/*
-	TODO
-*/
-
-
-/*void Solver::update(int i, int j, int value) {
-	if (value == 0) { 
-		//Si c'est une annulation, alors on réinitialise
-		initiate();
-	}
-	else {
-		NineUplet line = (*grid).getLine(i);
-		NineUplet region = (*grid).getRegionFromCell(i, j);
-		NineUplet column = (*grid).getColumn(j);
-
-		for (int x = 0; x < 9; x++) {
-				(*(*line.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
-				(*(*region.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
-				(*(*column.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
-		}
-
-		//Actualisation de la liste des left possibilities
-
-		for (std::list<Possibilities>::iterator itr = leftPossibilities.begin(); itr != leftPossibilities.end(); )
-		{
-			int leftI = (*itr).attachedI;
-			int leftJ = (*itr).attachedJ;
-			if (leftI == i && leftJ == j)
-				itr = leftPossibilities.erase(itr);
-			else
-				++itr;
-		}
-		leftPossibilities.sort(comparePossibilities);
-	}
-	hintableComputer = true;
-	hintableHuman = true;
-}*/
 
 
 /*
