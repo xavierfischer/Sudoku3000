@@ -109,6 +109,8 @@ NineUplet Grille::getColumn(int j) {
 	}
 }
 
+
+
 bool Grille::isConsistent() {
 	bool result = true;
 	for (int i = 0; i < 9; i++) {
@@ -142,6 +144,16 @@ bool Grille::isFull() {
 			return result;
 	}
 	return true;
+}
+
+int Grille::emptyValues() {
+	int count = 0;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			count += cells[i][j].isEmpty() ? 1 : 0;
+		}
+	}
+	return count;
 }
 
 /*
@@ -192,6 +204,36 @@ Grille Grille::createTemplateEparse() {
 	int l7[9] = { 9,1,0,0,0,0,0,7,8 };
 	int l8[9] = { 3,4,5,0,0,0,0,1,0 };
 	int l9[9] = { 0,0,0,0,1,0,3,4,5 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplateDifficile() {
+	int l1[9] = { 7,0,2,8,9,0,0,0,0 };
+	int l2[9] = { 0,4,0,0,0,0,0,0,2 };
+	int l3[9] = { 6,0,5,0,0,0,0,0,0 };
+	int l4[9] = { 8,0,0,2,0,4,0,0,0 };
+	int l5[9] = { 2,0,7,6,0,9,1,0,4 };
+	int l6[9] = { 0,0,0,5,0,7,0,0,6 };
+	int l7[9] = { 0,0,0,0,0,0,8,0,1 };
+	int l8[9] = { 1,0,0,0,0,0,0,6,0 };
+	int l9[9] = { 0,0,0,0,5,6,2,0,7 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplateHumanTest() {
+	int l1[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l2[9] = { 0,0,0,0,1,0,0,0,0 };
+	int l3[9] = { 0,0,0,0,0,0,0,1,0 };
+	int l4[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l5[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l6[9] = { 0,1,0,0,0,0,0,0,0 };
+	int l7[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l8[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l9[9] = { 0,0,1,0,0,0,0,0,0 };
 	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
 	Grille grille(data);
 	return grille;

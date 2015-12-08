@@ -1,6 +1,5 @@
 #include "Possibilities.h"
 
-
 Possibilities::Possibilities() {
 	setAllTo(true);
 	attachedI = -1;
@@ -8,11 +7,16 @@ Possibilities::Possibilities() {
 }
 
 bool Possibilities::getPossibility(int indexOfValue) { // not real value
-	return possibilities[indexOfValue];
+		return possibilities[indexOfValue];
 }
 
-void Possibilities::setPossibility(int i, bool indexOfValue) {
-	possibilities[i] = indexOfValue;
+void Possibilities::setPossibility(int index, bool indexOfValue) {
+	if (index > 9 || index < 0) {
+		throw 0;
+	}
+	else {
+		possibilities[index] = indexOfValue;
+	}
 }
 
 int Possibilities::possibles() {
@@ -25,12 +29,12 @@ int Possibilities::possibles() {
 
 int Possibilities::resolve() {
 	int count = 0;
-	int value = 0;
+	int index = 0;
 	for (int i = 0; i < 9; i++) {
 		count += possibilities[i] ? 1 : 0;
-		value = possibilities[i] ? i : value;
+		index = possibilities[i] ? i : index;
 	}
-	return count == 1 ? (value+1) : 0;
+	return count == 1 ? (index +1) : 0;
 }
 
 void Possibilities::setAllTo(bool v) {
@@ -40,6 +44,11 @@ void Possibilities::setAllTo(bool v) {
 }
 
 void Possibilities::attach(int i, int j) {
-	attachedI = i;
-	attachedJ = j;
+	if (i >= 0 && i < 9 && j >= 0 && j < 9) {
+		attachedI = i;
+		attachedJ = j;
+	}
+	else {
+		int max = i > j ? i : j;
+	}
 }

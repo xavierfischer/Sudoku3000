@@ -11,21 +11,21 @@ public:
 	Solver();
     Solver(Grille *grille);
     void initiate();
-	void update(int, int, int);
+	//void update(int, int, int);
 
-	int *hint();
+	int *hintComputer();
 	int *hintHuman();
-	bool isHintable();
+	bool isHintableComputer();
 	bool isHintableHuman();
 	Possibilities getPossibilities(int, int);
 	static void calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p);
 	int Solver::hintHumanInNuple(NineUplet nuple, int value);
+	bool initiated = false;
 
 private:
 	Grille *grid;
-	bool initiated = false;
 	list<Possibilities> leftPossibilities;
-	bool hintable;
+	bool hintableComputer;
 	bool hintableHuman;
 };
 #endif

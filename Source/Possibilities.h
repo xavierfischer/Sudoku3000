@@ -1,6 +1,8 @@
 #ifndef __Sudoku__POSSIBILITIES__
 #define __Sudoku__POSSIBILITIES__
 
+#include "Header.h"
+
 class Possibilities {
 
 public:

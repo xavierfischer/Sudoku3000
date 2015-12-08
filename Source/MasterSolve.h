@@ -10,13 +10,15 @@ class MasterSolve {
 
 public:
 	MasterSolve(Grille *grille);
-	bool hint();
-	bool hintHuman();
+
+	bool hintComputerUnit();
+	bool hintHumanUnit();
+
 	bool solve();
+	bool solveUnit();
 
 private:
 	Grille *grid;
-	bool LastCellHint;
 	Solver solver;
 };
 

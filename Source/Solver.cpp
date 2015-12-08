@@ -29,6 +29,10 @@ static bool comparePossibilities(Possibilities &a, Possibilities &b)
 	return c1>c2;
 }
 
+/*
+	Réinitialise les tableaux de possibilités pour toutes les cellules
+*/
+
 void Solver::initiate() {
 	leftPossibilities.clear();
 	for (int i = 0; i < 9; i++) {
@@ -63,8 +67,8 @@ void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet co
 		p.setPossibility(k,
 			   (!line.isPresent(k + 1)) 
 			&& (!region.isPresent(k + 1)) 
-			&& (!column.isPresent(k + 1))
-		);
+&& (!column.isPresent(k + 1))
+);
 
 	}
 }
@@ -77,20 +81,30 @@ void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet co
 int Solver::hintHumanInNuple(NineUplet nuple, int value) {
 	int localCoord = -1;
 	if (!nuple.isFull() && !nuple.isPresent(value)) {
-		int a = 0;
+		int a = -2;
 		for (int j = 0; j < 9; j++) { // pour chaque cellule de la région
 			if (a != -1) { // Deux possibilités déjà trouvées
 				if (((*(*nuple.getCell(j)).getPossibilities())).getPossibility(value - 1)) {
-					a = a == 0 ? j : -1;
+					a = a == -2 ? j : -1;
 				}
 			}
 		}
-		if (a != -1 && a != 0) { // Si on a bien une et une seule valeur
+		if (a != -1 && a != -2) { // Si on a bien une et une seule valeur
 			localCoord = a;
 		}
 	}
 	return localCoord;
 }
+
+/*
+	Retourne un triplet de integer représentant un guess sur une prochaine valeur
+	La méthode de guess est celle consistant à lister tes les places possibles pour une valeur dans une région, une ligne
+	ou une colonne
+
+	[0] : ligne du guess
+	[1] : colonne du guess
+	[2] : valeur du guess
+*/
 
 int *Solver::hintHuman() {
 	int coords[3] = { 0,0,0 };
@@ -99,21 +113,23 @@ int *Solver::hintHuman() {
 		coords[2] = i;
 
 		for (int x = 0; x < 9; x++) { // pour chaque ligne
-			NineUplet line = (*grid).getLine(i);
+			NineUplet line = (*grid).getLine(x);
 			int localCoord = hintHumanInNuple(line, i);
 			if (localCoord != -1) {
 				coords[0] = x;
 				coords[1] = localCoord;
+				hintableHuman = true;
 				return coords;
 			}
 		}
 
 		for (int x = 0; x < 9; x++) { // pour chaque ligne
-			NineUplet column = (*grid).getColumn(i);
+			NineUplet column = (*grid).getColumn(x);
 			int localCoord = hintHumanInNuple(column, i);
 			if (localCoord != -1) {
 				coords[0] = localCoord;
 				coords[1] = x;
+				hintableHuman = true;
 				return coords;
 			}
 		}
@@ -125,37 +141,75 @@ int *Solver::hintHuman() {
 				if (localCoord != -1) {
 					coords[0] = x * 3 + (localCoord % 3);
 					coords[1] = y * 3 + (localCoord - localCoord % 3) / 3;
+					hintableHuman = true;
 					return coords;
 				}
 			}
 		}
-		return coords;
 	}
+	hintableHuman = false;
+	coords[2] = 0;
+	return coords;
 }
 
-int *Solver::hint() {
+/*
+	Retourne un triplet de integer représentant un guess sur une prochaine valeur
+	La méthode de guess est celle consistant à lister toutes les possibilités d'une cellule et à attribuer une valeur s'il
+	y a une unique possibilité
+
+	[0] : ligne du guess
+	[1] : colonne du guess
+	[2] : valeur du guess
+*/
+
+int *Solver::hintComputer() {
 	int coords[3] = { 0, 0, 0 };
 	if (leftPossibilities.size() > 0) {
+
 		Possibilities p = leftPossibilities.front();
 		int i = p.attachedI;
 		int j = p.attachedJ;
+		bool isAttributed = true;
+
+		while (isAttributed) {
+			if (leftPossibilities.size() == 0) {
+				return coords;
+			}
+			else {
+				p = leftPossibilities.front();
+				i = p.attachedI;
+				j = p.attachedJ;
+				if (!(*(*grid).getCell(i, j)).isEmpty()) {
+					isAttributed = true;
+					leftPossibilities.pop_front();
+				}
+				else {
+					isAttributed = false;
+				}
+			}
+		}
+
+		if(!(*(*grid).getCell(i, j)).isEmpty()){ // s'il y a déjà une valeur, passer son tour
+			leftPossibilities.pop_front();
+			return hintComputer();
+		}
 		Possibilities realP = getPossibilities(i, j);
 		int value = realP.resolve(); // realValue
 		if (value != 0) {
-			Cellule *cell = (*grid).getCell(i,j);
-			(*cell).setValue(value); // realValue
+			//Cellule *cell = (*grid).getCell(i,j);
+			//(*cell).setValue(value); // realValue
 			leftPossibilities.pop_front();
-			hintable = true;
+			hintableComputer = true;
 			coords[0] = i;
 			coords[1] = j;
 			coords[2] = value; // realValue
 		}
 		else {
-			hintable = false;
+			hintableComputer = false;
 		}
 	}
 	else {
-		hintable = false;
+		hintableComputer = false;
 	}
 	return coords;
 }
@@ -165,7 +219,7 @@ int *Solver::hint() {
 */
 
 
-void Solver::update(int i, int j, int value) {
+/*void Solver::update(int i, int j, int value) {
 	if (value == 0) { 
 		//Si c'est une annulation, alors on réinitialise
 		initiate();
@@ -180,9 +234,23 @@ void Solver::update(int i, int j, int value) {
 				(*(*region.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
 				(*(*column.getCell(x)).getPossibilities()).setPossibility(value - 1, false);
 		}
+
+		//Actualisation de la liste des left possibilities
+
+		for (std::list<Possibilities>::iterator itr = leftPossibilities.begin(); itr != leftPossibilities.end(); )
+		{
+			int leftI = (*itr).attachedI;
+			int leftJ = (*itr).attachedJ;
+			if (leftI == i && leftJ == j)
+				itr = leftPossibilities.erase(itr);
+			else
+				++itr;
+		}
 		leftPossibilities.sort(comparePossibilities);
 	}
-}
+	hintableComputer = true;
+	hintableHuman = true;
+}*/
 
 
 /*
@@ -194,8 +262,8 @@ Possibilities Solver::getPossibilities(int i, int j)
 	return *(*(*grid).getCell(i,j)).getPossibilities();
 }
 
-bool Solver::isHintable() {
-	return hintable;
+bool Solver::isHintableComputer() {
+	return hintableComputer;
 }
 
 bool Solver::isHintableHuman() {

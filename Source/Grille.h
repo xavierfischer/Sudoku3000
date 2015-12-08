@@ -13,21 +13,22 @@ public:
 	Grille(int *a[9]);
 
 	NineUplet getRegionFromCell(int, int);
-
 	NineUplet getRegion(int, int);
 	NineUplet getLine(int);
 	NineUplet getColumn(int);
 
 	Cellule *getCell(int, int);
-
 	bool isFull();
 	bool isConsistent();
+	int emptyValues();
 
 	static Grille createTemplate();
 	static Grille createTemplateMissing();
 	static Grille createTemplateMissing2();
 	static Grille createTemplateWrong();
 	static Grille createTemplateEparse();
+	static Grille createTemplateHumanTest();
+	static Grille createTemplateDifficile();
 
 	list<list<int>> getUnconsistentCells(int, int);
 	bool isCellConsistent(int i, int j);

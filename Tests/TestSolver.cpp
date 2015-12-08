@@ -98,7 +98,7 @@ namespace Tests
 
 		}
 
-		TEST_METHOD(Update) {
+		/*TEST_METHOD(Update) {
 
 			Grille grille;
 
@@ -137,20 +137,36 @@ namespace Tests
 				Assert::IsFalse((*(*region.getCell(j)).getPossibilities()).getPossibility(0));
 				Assert::IsFalse((*(*column.getCell(j)).getPossibilities()).getPossibility(0));
 			}
-		}
+		}*/
 
-		TEST_METHOD(Hint) {
+		TEST_METHOD(Hint_Computer) {
 
 			Grille grille = Grille::createTemplateMissing();
 			Solver solver(&grille);
 
 			solver.initiate();
-			for (int i = 0; i < 9; i++) {
-				solver.hint();
-			}
-			Cellule c = *grille.getCell(0, 1);
-			Assert::AreEqual(2, c.getValue());
 
+			int *result = solver.hintComputer();
+			int value = result[2];
+
+			Assert::AreEqual(2, value);
+		}
+
+		TEST_METHOD(Hint_Human) {
+
+			Grille grille = Grille::createTemplateHumanTest();
+			Solver solver(&grille);
+
+			solver.initiate();
+
+			int *result = solver.hintHuman();
+			int coordx = result[0];
+			int coordy = result[1];
+			int value = result[2];
+
+			Assert::AreEqual(1, value);
+			Assert::AreEqual(0, coordx);
+			Assert::AreEqual(0, coordy);
 		}
 
 
@@ -164,13 +180,14 @@ namespace Tests
 
 			solver.initiate();
 
-			while (solver.isHintable()) {
-				int *result = solver.hint();
+			while (solver.isHintableComputer()) {
+				int *result = solver.hintComputer();
 				int i = result[0];
 				int j = result[1];
 				int value = result[2]; // realValue
 				if (value != 0) {
-					solver.update(i,j,value);
+					(*grille.getCell(i, j)).setValue(value);
+					solver.initiate();
 				}
 			}
 			

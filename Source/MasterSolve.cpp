@@ -5,30 +5,65 @@ MasterSolve::MasterSolve(Grille *grille){
 	solver = Solver(grille);
 }
 
-bool MasterSolve::hint() {
-	return false;
-}
-
-bool MasterSolve::hintHuman() {
+bool MasterSolve::hintHumanUnit() {
 	int *result = solver.hintHuman();
 	int i = result[0];
 	int j = result[1];
-	int value = result[2];
-	return value == 0;
+	int value = result[2]; // realValue
+	if (value != 0) {
+		(*(*grid).getCell(i, j)).setValue(value);
+		solver.initiate();
+		return true;
+	}
+	return false;
+}
+
+bool MasterSolve::hintComputerUnit() {
+	int *result = solver.hintComputer();
+	int i = result[0];
+	int j = result[1];
+	int value = result[2]; // realValue
+	if (value != 0) {
+		(*(*grid).getCell(i, j)).setValue(value);
+		solver.initiate();
+		return true;
+	}
+	return false;
+}
+
+bool MasterSolve::solveUnit() {
+	if ((*grid).isConsistent()) {
+		if (!solver.initiated) {
+			solver.initiate();
+		}
+
+		if (hintHumanUnit()) {
+			solver.initiate();
+			return true;
+		}
+		else {
+			if (hintComputerUnit()) {
+				solver.initiate();
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+	else {
+		return false;
+	}
 }
 
 bool MasterSolve::solve() {
 
 	solver.initiate();
+	bool algoCanYouContinue = true;
 
-	while (solver.isHintable()) {
-		int *result = solver.hint();
-		int i = result[0];
-		int j = result[1];
-		int value = result[2]; // realValue
-		if (value != 0) {
-			solver.update(i, j, value);
-		}
+	while (algoCanYouContinue) {
+		int missingValues = (*grid).emptyValues();
+		algoCanYouContinue = solveUnit();
 	}
 
 	return (*grid).isFull() && (*grid).isConsistent();
