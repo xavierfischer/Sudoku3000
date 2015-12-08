@@ -26,6 +26,7 @@ public:
 	static Grille createTemplateMissing();
 	static Grille createTemplateMissing2();
 	static Grille createTemplateWrong();
+	static Grille createTemplateEmpty();
 	static Grille createTemplateEparse();
 	static Grille createTemplateHumanTest();
 	static Grille createTemplateDifficile();
