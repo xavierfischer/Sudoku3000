@@ -213,8 +213,6 @@ int *Solver::hintComputer() {
 					value2 = (value1 != 0 && realP.getPossibility(i)) ? (i + 1) : value2;
 				}
 
-
-
 			}
 			else {
 				hintableComputer = false;

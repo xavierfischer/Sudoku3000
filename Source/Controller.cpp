@@ -259,6 +259,15 @@ void Controller::run(){
 	SolveButton.AddHandler([&]() {
 		MasterSolve master(&CurrentGrille);
 		master.solve();
+
+		if (CurrentGrille.isFull() & CurrentGrille.isConsistent()) {
+			//Le solver à réussi
+			VictoryButton.Texte.setString("Was it THAT hard ? Click to end");
+			VictoryButton.Texte.setCharacterSize(VictoryButton.Texte.getCharacterSize() /1.8 );
+			VictoryButton.Centering();
+			Victory = 1;
+		}
+
 	});
 	//---HintButton
 	Button HintButton = Button(
@@ -271,6 +280,18 @@ void Controller::run(){
 	HintButton.AddHandler([&]() {
 		MasterSolve master(&CurrentGrille);
 		master.solveUnit();
+
+
+		for (int i = 0; i <= 8; ++i) {
+			for (int j = 0; j <= 8; ++j) {
+				//Si la valeur est differente du texte, on l'active
+				if (std::to_string((*CurrentGrille.getCell(i, j)).getValue()) != ButtonCell[i][j].Texte.getString() &
+					(*CurrentGrille.getCell(i, j)).getValue() !=0) {
+					ButtonCell[i][j].CallHandler();
+					break;
+				}
+			}
+		}
 	});
 	
 
@@ -416,6 +437,7 @@ void Controller::run(){
 		BackColor);
 	TemplateButton.AddHandler([&]() {
 		CurrentGrille = Grille::createTemplateDiabolique();
+		FixerButton.CallHandler();
 	});
 
 
