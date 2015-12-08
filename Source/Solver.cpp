@@ -1,21 +1,14 @@
 #include "Solver.h"
 
-
-
 /*
-	Cette classe permet de solver en backtrack une grille
+	Cette classe permet de résoudre une grille selon deux algorithmes : "humain" ou "computer" (cf classe MasterSolve.cpp)
 */
 
 Solver::Solver(){}
-
 Solver::Solver(Grille *g) :grid(g) {}
 
 /*
-	Regarde toutes les cellules et actualise les possibilités
-*/
-
-/*
-	Comparateur de tableau de possibilités
+	Comparateur de tableau de possibilités, selon le nombre de valeurs possibles
 	Utilisé pour trier les cellules
 */
 
@@ -29,10 +22,8 @@ static bool comparePossibilities(Possibilities &a, Possibilities &b)
 	return c1>c2;
 }
 
-/*
-	Réinitialise les tableaux de possibilités pour toutes les cellules
-*/
 
+//Met à jour les tableaux de possibilités pour toutes les cellules
 void Solver::initiate() {
 	leftPossibilities.clear();
 	for (int i = 0; i < 9; i++) {
@@ -57,10 +48,7 @@ void Solver::initiate() {
 	leftPossibilities.sort(comparePossibilities);
 }
 
-/*
-	Met à jour un tableau de possibilités pour une cellule se trouvant dans une région, une ligne et une colonne données
-*/
-
+// Met à jour un tableau de possibilités pour une cellule se trouvant dans une région, une ligne et une colonne données
 void Solver::calcPoss(NineUplet const region, NineUplet const line, NineUplet const column, Possibilities &p) {
 	for (int k = 0; k < 9; k++) {
 		
@@ -118,7 +106,6 @@ int *Solver::hintHuman() {
 			if (localCoord != -1) {
 				coords[0] = x;
 				coords[1] = localCoord;
-				hintableHuman = true;
 				return coords;
 			}
 		}
@@ -129,7 +116,6 @@ int *Solver::hintHuman() {
 			if (localCoord != -1) {
 				coords[0] = localCoord;
 				coords[1] = x;
-				hintableHuman = true;
 				return coords;
 			}
 		}
@@ -142,13 +128,11 @@ int *Solver::hintHuman() {
 					//Formules foireuses
 					coords[1] = x * 3 + (localCoord % 3);
 					coords[0] = y * 3 + (localCoord - localCoord % 3) / 3;
-					hintableHuman = true;
 					return coords;
 				}
 			}
 		}
 	}
-	hintableHuman = false;
 	coords[2] = 0;
 	return coords;
 }
@@ -196,7 +180,6 @@ int *Solver::hintComputer() {
 			//Cellule *cell = (*grid).getCell(i,j);
 			//(*cell).setValue(value); // realValue
 			leftPossibilities.pop_front();
-			hintableComputer = true;
 			coords[0] = i;
 			coords[1] = j;
 			coords[2] = value; // realValue
@@ -214,18 +197,10 @@ int *Solver::hintComputer() {
 				}
 
 			}
-			else {
-				hintableComputer = false;
-			}
 		}
-	}
-	else {
-		hintableComputer = false;
 	}
 	return coords;
 }
-
-
 
 /*
 	Renvoie les neuf possibilités de la case (i,j), sous forme d'un array de booléens
@@ -234,12 +209,4 @@ int *Solver::hintComputer() {
 Possibilities Solver::getPossibilities(int i, int j)
 {
 	return *(*(*grid).getCell(i,j)).getPossibilities();
-}
-
-bool Solver::isHintableComputer() {
-	return hintableComputer;
-}
-
-bool Solver::isHintableHuman() {
-	return hintableHuman;
 }

@@ -12,6 +12,8 @@ Cellule::Cellule() {
 	value = 0;
 	isFixed = false;
 }
+
+// Constructeur avec une valeur
 Cellule::Cellule(int n){
 	value = n;
 	isFixed = n!=0;
@@ -34,10 +36,11 @@ void Cellule::setValue(int n) {
 		value = n;
 	}
 	else {
-		//throw out_of_range("OUT OF RANGE");
+		throw 0;
 	}
 }
 
+// Renvoie le tableau des possibilités associé à cette cellule
 Possibilities *Cellule::getPossibilities() {
 	return &possibilities;
 }

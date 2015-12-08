@@ -168,32 +168,5 @@ namespace Tests
 			Assert::AreEqual(0, coordx);
 			Assert::AreEqual(0, coordy);
 		}
-
-
-		TEST_METHOD(Complete_Missing_grid) {
-
-			Grille grille = Grille::createTemplateMissing2();
-			Solver solver(&grille);
-
-			Assert::IsFalse(grille.isFull());
-			Assert::IsTrue(grille.isConsistent());
-
-			solver.initiate();
-
-			while (solver.isHintableComputer()) {
-				int *result = solver.hintComputer();
-				int i = result[0];
-				int j = result[1];
-				int value = result[2]; // realValue
-				if (value != 0) {
-					(*grille.getCell(i, j)).setValue(value);
-					solver.initiate();
-				}
-			}
-			
-			Assert::IsTrue(grille.isFull());
-			Assert::IsTrue(grille.isConsistent());
-
-		}
 	};
 }

@@ -1,9 +1,26 @@
 #include "MasterSolve.h"
 
+/*
+	Cette grille permet de façon simple grace à deux méthodes solve() et hint() de créer un object Solver sur une grille
+	et de lancer les algorithmes. 
+
+	Trois façons d'avancer sont implémentées : 
+
+	Algorithme humain : regarde les cellules possibles pour une valeur donnée. S'il y a une seule cellule possible, la valeur est attribuée.
+	Algorithme computer : regarde les valeurs possibles pour une cellule donnée. S'il y a une seule valeur possible, la valeur est attribuée.
+	Algorithme backtrack : émet une hypothèse sur la valeur d'une cellule et tente de résoudre la grille ainsi modifiée. En cas d'incohérence
+		après les autres itérations de l'algorithme global, l'hypothèse est éliminée. S'il n'y a pas d'incohérence, la valeur est confirmée
+		et la grille est alors résolue. 
+*/
+
 MasterSolve::MasterSolve(Grille *grille){
 	grid = grille;
 	solver = Solver(grille);
 }
+
+/*
+	Lance une itération de l'algorithme de détection "humain"
+*/
 
 bool MasterSolve::hintHumanUnit() {
 	int *result = solver.hintHuman();
@@ -18,6 +35,10 @@ bool MasterSolve::hintHumanUnit() {
 	return false;
 }
 
+/*
+	Lance une itération de l'algorithme de détection "computer"
+*/
+
 bool MasterSolve::hintComputerUnit() {
 	int *result = solver.hintComputer();
 	int i = result[0];
@@ -30,6 +51,11 @@ bool MasterSolve::hintComputerUnit() {
 	}
 	return false;
 }
+
+/*
+	Lance une itération d'algorithme humain. En cas d'échec, lance une itération d'algo computer. En cas d'échec, lance un backtrack.
+	Renvoie true si une cellule est devinée, false sinon
+*/
 
 bool MasterSolve::solveUnit() {
 	if ((*grid).isConsistent()) {
@@ -82,11 +108,10 @@ bool MasterSolve::solveUnit() {
 			}
 		}
 	}
-	else {
 		return false;
-	}
 }
 
+//Lance une suite d'itération de l'algorithme jusqu'à résoudre la grille ou trouver une incohérence
 bool MasterSolve::solve() {
 	if ((*grid).isConsistent()) {
 		solver.initiate();
