@@ -1,4 +1,3 @@
-
 #ifndef __Sudoku__Cell__
 #define __Sudoku__Cell__
 
