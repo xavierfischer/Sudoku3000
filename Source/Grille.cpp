@@ -1,5 +1,6 @@
 #include "Grille.h"
-
+#include <time.h>
+#include <stdlib.h>
 /*
 	Cette classe définit une grille de 81 cellules. 
 */
@@ -326,6 +327,190 @@ Grille Grille::createTemplateEmpty() {
 	int l7[9] = { 0,0,0,0,0,0,0,0,0 };
 	int l8[9] = { 0,0,0,0,0,0,0,0,0 };
 	int l9[9] = { 0,0,0,0,0,0,0,0,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+
+
+
+Grille Grille::rdmGrille()
+{	
+	std::srand(time(NULL));
+	int n = std::rand() % 10 + 1;
+	switch (n){//On crée une Grille aléatoirement entre les 10 qu'on a hardcodées
+	case 1:
+		return createTemplate1();
+	case 2:
+		return createTemplate2();
+	case 3:
+		return createTemplate3();
+	case 4:
+		return createTemplate4();
+	case 5:
+		return createTemplate5();
+	case 6:
+		return createTemplate6();
+	case 7:
+		return createTemplate7();
+	case 8:
+		return createTemplate8();
+	case 9:
+		return createTemplate9();
+	case 10:
+		return createTemplate10();
+	default:
+		return createTemplateEmpty();
+
+	}
+}
+
+Grille Grille::createTemplate1() {
+	int l1[9] = { 0,5,1,0,7,2,0,6,0 };
+	int l2[9] = { 6,0,0,3,0,0,2,0,0 };
+	int l3[9] = { 2,3,0,0,1,4,0,5,0 };
+	int l4[9] = { 0,0,0,0,9,7,1,0,4 };
+	int l5[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l6[9] = { 9,0,2,1,4,0,0,0,0 };
+	int l7[9] = { 0,2,0,4,3,0,0,9,7 };
+	int l8[9] = { 0,0,8,0,0,6,0,0,5 };
+	int l9[9] = { 0,4,0,9,8,0,6,2,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate2() {
+	int l1[9] = { 2,5,0,0,1,8,7,0,0 };
+	int l2[9] = { 0,4,0,0,0,9,1,0,0 };
+	int l3[9] = { 0,0,0,0,7,5,0,8,0 };
+	int l4[9] = { 8,0,3,0,4,0,0,5,0 };
+	int l5[9] = { 0,6,4,7,0,2,8,1,0 };
+	int l6[9] = { 0,7,0,0,5,0,4,0,2 };
+	int l7[9] = { 0,3,0,5,8,0,0,0,0 };
+	int l8[9] = { 0,0,5,6,0,0,0,9,0 };
+	int l9[9] = { 0,0,7,9,3,0,0,2,4 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate3() {
+	int l1[9] = { 0,0,0,5,2,8,7,0,6 };
+	int l2[9] = { 0,0,4,0,0,3,8,0,1 };
+	int l3[9] = { 5,0,8,0,1,4,0,9,0 };
+	int l4[9] = { 0,4,1,0,0,0,0,0,9 };
+	int l5[9] = { 0,0,0,0,0,0,0,0,0 };
+	int l6[9] = { 3,0,0,0,0,0,1,7,0 };
+	int l7[9] = { 0,1,0,2,3,0,4,0,8 };
+	int l8[9] = { 8,0,6,7,0,0,9,0,0 };
+	int l9[9] = { 4,0,3,8,6,1,0,0,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate4() {
+	int l1[9] = { 0,7,4,6,0,0,0,0,0 };
+	int l2[9] = { 0,6,0,2,8,0,4,7,9 };
+	int l3[9] = { 0,0,8,0,0,0,5,2,0 };
+	int l4[9] = { 9,0,1,8,3,0,0,0,0 };
+	int l5[9] = { 0,5,0,9,0,6,0,3,0 };
+	int l6[9] = { 0,0,0,0,1,5,9,0,8 };
+	int l7[9] = { 0,3,5,0,0,0,2,0,0 };
+	int l8[9] = { 6,1,2,0,9,4,0,8,0 };
+	int l9[9] = { 0,0,0,0,0,7,3,6,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate5() {
+	int l1[9] = { 4,0,0,6,3,0,0,0,1 };
+	int l2[9] = { 0,6,0,8,0,0,0,0,0 };
+	int l3[9] = { 9,0,0,0,0,0,6,3,5 };
+	int l4[9] = { 5,0,2,3,0,0,0,9,0 };
+	int l5[9] = { 8,0,9,1,0,4,5,0,6 };
+	int l6[9] = { 0,1,0,0,0,8,4,0,3 };
+	int l7[9] = { 6,9,7,0,0,0,0,0,4 };
+	int l8[9] = { 0,0,0,0,0,6,0,5,0 };
+	int l9[9] = { 3,0,0,0,7,1,0,0,2 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate6() {
+	int l1[9] = { 4,0,7,0,5,9,0,0,0 };
+	int l2[9] = { 0,0,0,0,0,6,9,0,0 };
+	int l3[9] = { 0,5,0,8,4,0,6,0,1 };
+	int l4[9] = { 1,8,5,0,6,0,0,0,0 };
+	int l5[9] = { 0,7,4,9,0,8,3,5,0 };
+	int l6[9] = { 0,0,0,0,7,0,1,8,2 };
+	int l7[9] = { 9,0,8,0,2,7,0,3,0 };
+	int l8[9] = { 0,0,6,5,0,0,0,0,0 };
+	int l9[9] = { 0,0,0,3,9,0,7,0,8 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate7() {
+	int l1[9] = { 0,5,1,0,4,7,8,0,6 };
+	int l2[9] = { 0,7,0,2,9,0,3,0,0 };
+	int l3[9] = { 6,3,2,0,8,0,0,0,0 };
+	int l4[9] = { 0,0,0,0,0,0,5,6,1 };
+	int l5[9] = { 0,8,0,0,0,0,0,4,0 };
+	int l6[9] = { 5,2,6,0,0,0,0,0,0 };
+	int l7[9] = { 0,0,0,0,6,0,9,5,7 };
+	int l8[9] = { 0,0,5,0,7,2,0,3,0 };
+	int l9[9] = { 7,0,3,5,1,0,6,8,0 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate8() {
+	int l1[9] = { 9,4,2,0,0,0,3,0,1 };
+	int l2[9] = { 7,3,0,0,0,0,0,0,0 };
+	int l3[9] = { 1,8,0,7,0,0,0,5,0 };
+	int l4[9] = { 0,0,0,4,3,0,1,8,0 };
+	int l5[9] = { 0,1,0,2,0,5,0,3,0 };
+	int l6[9] = { 0,2,8,0,6,9,0,0,0 };
+	int l7[9] = { 0,7,0,0,0,2,0,1,8 };
+	int l8[9] = { 0,0,0,0,0,0,0,2,5 };
+	int l9[9] = { 2,0,1,0,0,0,6,9,3 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate9() {
+	int l1[9] = { 4,0,9,0,2,0,0,0,7 };
+	int l2[9] = { 7,0,8,9,0,5,0,1,0 };
+	int l3[9] = { 0,6,0,4,0,7,9,0,0 };
+	int l4[9] = { 0,9,4,0,7,0,0,0,0 };
+	int l5[9] = { 0,0,0,1,0,8,0,0,0 };
+	int l6[9] = { 0,0,0,0,4,0,1,3,0 };
+	int l7[9] = { 0,0,2,7,0,3,0,9,0 };
+	int l8[9] = { 0,8,0,2,0,9,6,0,3 };
+	int l9[9] = { 9,0,0,0,6,0,2,0,5 };
+	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
+	Grille grille(data);
+	return grille;
+}
+
+Grille Grille::createTemplate10() {
+	int l1[9] = { 3,0,5,0,2,0,0,6,7 };
+	int l2[9] = { 8,0,0,6,0,0,3,0,0 };
+	int l3[9] = { 0,0,0,0,1,9,0,0,0 };
+	int l4[9] = { 0,0,7,0,6,0,0,1,3 };
+	int l5[9] = { 1,6,4,0,5,0,9,2,8 };
+	int l6[9] = { 2,8,0,0,9,0,5,0,0 };
+	int l7[9] = { 0,0,0,1,4,0,0,0,0 };
+	int l8[9] = { 0,0,9,0,0,6,0,0,1 };
+	int l9[9] = { 6,7,0,0,3,0,8,0,4 };
 	int *data[9] = { l1,l2,l3,l4,l5,l6,l7,l8,l9 };
 	Grille grille(data);
 	return grille;

@@ -32,6 +32,18 @@ public:
 	static Grille createTemplateDifficile();
 	static Grille createTemplateDiabolique();
 
+	static Grille rdmGrille();
+	static Grille createTemplate1();
+	static Grille createTemplate2();
+	static Grille createTemplate3();
+	static Grille createTemplate4();
+	static Grille createTemplate5();
+	static Grille createTemplate6();
+	static Grille createTemplate7();
+	static Grille createTemplate8();
+	static Grille createTemplate9();
+	static Grille createTemplate10();
+
 	list<list<int>> getUnconsistentCells(int, int);
 	bool isCellConsistent(int i, int j);
 

@@ -301,7 +301,7 @@ void Controller::run(){
 	HelpMenu.setOutlineThickness(2);
 	HelpMenu.setOutlineColor(CancelColor);
 
-	//__Boutton pour activer l'aide à la consistence. Quend elle est activée, la cellule devient rouge quand on detecte un conflit direct avec une autre.
+	//___ConsistencyHelpButton___ pour activer l'aide à la consistence. Quend elle est activée, la cellule devient rouge quand on detecte un conflit direct avec une autre.
 	Button CHelpButton = Button(
 		CancelColor,
 		sf::Vector2f(306, 220),
@@ -433,9 +433,7 @@ void Controller::run(){
 		"Model",
 		BackColor);
 	TemplateButton.AddHandler([&]() {
-		CurrentGrille = Grille::createTemplateDiabolique(); //On créé la grille
-		//int n = rand() % 10;
-		//CurrentGrille = Grille::createTemplate(n);
+		CurrentGrille = Grille::rdmGrille(); //On choisit dans les 10 grille templates hardcodées
 		FixerButton.CallHandler();//On fixe le problème
 	});
 
