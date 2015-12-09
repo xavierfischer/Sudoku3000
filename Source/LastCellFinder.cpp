@@ -47,5 +47,4 @@ bool LastCellFinder::fill() {
 		return true;
 	}
 	return false;
-	*/
 }
